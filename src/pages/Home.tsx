@@ -192,38 +192,56 @@ export default function Home() {
         {JSON.stringify(structuredData)}
       </script>
       {/* Hero Section */}
-      <section className="hero-section" style={{background: '#fff', padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap'}}>
+      <section className="hero-section" style={{background: '#fff', padding: '4rem 0', maxWidth: '1200px', margin: '0 auto', overflow: 'visible'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '8rem', flexWrap: 'wrap', position: 'relative'}}>
           {/* Left Side - Main Content */}
-          <motion.div style={{flex: '1', minWidth: '500px'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-            <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px'}}>Empowering Business Futures</div>
-            <h1 style={{
-              color: '#222', 
-              fontSize: '3.8rem', 
-              fontWeight: '700', 
-              lineHeight: '1.1', 
-              marginBottom: '2rem',
-              letterSpacing: '-0.02em',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-            }}>
-              Driving Digital<br />
-              Solutions to<br />
-              Elevate Your Business<br />
-              <span style={{color: '#f58220', fontWeight: '700'}}>Future</span>
-            </h1>
-            <a href="/contact" className="cta-btn" style={{
-              backgroundColor: '#f58220', 
-              color: 'white', 
-              padding: '1.2rem 2.5rem', 
-              borderRadius: '50px', 
-              textDecoration: 'none', 
-              fontSize: '1.1rem', 
-              fontWeight: '700', 
-              display: 'inline-block',
-              boxShadow: '0 4px 15px rgba(245, 130, 32, 0.3)',
-              transition: 'all 0.3s ease',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-            }}>Get Started</a>
+          <motion.div style={{flex: '1', minWidth: '500px', paddingRight: '10rem', paddingLeft: '0', marginLeft: '-4rem', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+            <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px', textAlign: 'left'}}>Empowering Business Futures</div>
+            <div style={{display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap'}}>
+              <h1 style={{
+                boxDecorationBreak: 'clone',
+                boxSizing: 'border-box',
+                color: '#222',
+                display: 'inline',
+                fontFamily: 'Figtree, sans-serif',
+                fontSize: '44px',
+                fontWeight: '500',
+                height: 'auto',
+                letterSpacing: '-1.32px',
+                lineHeight: '52.8px',
+                marginBlockEnd: '16px',
+                marginBlockStart: '8px',
+                marginInlineEnd: '0px',
+                marginInlineStart: '0px',
+                textAlign: 'left',
+                textSizeAdjust: '100%',
+                unicodeBidi: 'isolate',
+                width: 'auto',
+                WebkitFontSmoothing: 'antialiased',
+                marginLeft: '0',
+                paddingLeft: '0',
+                position: 'relative',
+                left: '0',
+                top: '0'
+              }}>
+                Driving Digital Solutions to Elevate Your Business <span style={{color: '#f58220', fontWeight: '500', }}>Future</span>
+                <a href="/contact" className="cta-btn" style={{
+                backgroundColor: '#f58220', 
+                color: 'white', 
+                marginLeft: '1.5rem',
+                padding: '0.2rem 3.5rem', 
+                borderRadius: '50px', 
+                textDecoration: 'none', 
+                fontSize: '1.1rem', 
+                fontWeight: '700', 
+                display: 'inline-block',
+                boxShadow: '0 4px 15px rgba(245, 130, 32, 0.3)',
+                transition: 'all 0.3s ease',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+                whiteSpace: 'nowrap'
+              }}>Get Started</a>
+              </h1>
+            </div>
           </motion.div>
           
           {/* Right Side - Rating Content */}
