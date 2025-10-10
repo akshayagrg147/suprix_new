@@ -44,7 +44,7 @@ export default function Contact() {
 
     try {
       // Check if EmailJS is properly configured
-      if (EMAILJS_PUBLIC_KEY === 'your_public_key_here') {
+      if (!EMAILJS_PUBLIC_KEY || EMAILJS_PUBLIC_KEY.includes('your_public_key')) {
         // Fallback: Show email content and provide options
         const subject = `Contact Form Submission from ${formData.name}`;
         const body = `

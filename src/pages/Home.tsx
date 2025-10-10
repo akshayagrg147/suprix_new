@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const serviceImgs = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=96&q=80', // AI/ML
@@ -25,18 +25,19 @@ const portfolioImgs = [
   'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
   'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80',
 ];
-const teamImgs = [
-  'https://api.dicebear.com/7.x/avataaars/svg?seed=CEO&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=male', // CEO - Boy
-  'https://api.dicebear.com/7.x/avataaars/svg?seed=CTO&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=male', // CTO - Boy
-  'https://api.dicebear.com/7.x/avataaars/svg?seed=BDE&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=female', // BDE - Girl
-];
+// Team images currently commented out in team section
+// const teamImgs = [
+//   'https://api.dicebear.com/7.x/avataaars/svg?seed=Vishal&style=circle&backgroundColor=4285f4&clothingColor=262e33&skinColor=fdbcb4&hairColor=2c1b18&facialHairColor=2c1b18&facialHairProbability=80&topType=shortHair&accessoriesType=prescription02&facialHairType=beardMedium&gender=male',
+//   'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&style=circle&backgroundColor=34a853&clothingColor=262e33&skinColor=fdbcb4&hairColor=8b4513&topType=longHair&accessoriesType=prescription01&facialHairType=blank&gender=female',
+//   'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&style=circle&backgroundColor=ea4335&clothingColor=262e33&skinColor=fdbcb4&hairColor=2c1b18&topType=shortHair&accessoriesType=prescription01&facialHairType=blank&gender=male',
+// ];
 
 const stats = [
-  { label: 'IT Solutions Delivered', value: '350+' },
-  { label: 'Enterprise Clients', value: '20+' },
-  { label: 'Mobile Apps with 1M+ Downloads', value: '30+' },
-  { label: 'Client Retention Rate', value: '80%' },
-  { label: 'Expert IT Professionals', value: '600+' },
+  { label: 'IT Solutions Delivered', value: 50, suffix: '+' },
+  { label: 'Enterprise Clients', value: 15, suffix: '+' },
+  { label: 'Mobile Apps with 1L+ Downloads', value: 30, suffix: '+' },
+  { label: 'Client Retention Rate', value: 80, suffix: '%' },
+  { label: 'Expert IT Professionals', value: 30, suffix: '+' },
 ];
 
 const processSteps = [
@@ -85,9 +86,9 @@ const caseStudies = [
 ];
 
 const team = [
-  { name: 'Akshay Garg', role: 'Chief Executive Officer & Director of IT Strategy', img: teamImgs[0] },
-  { name: 'Vishal Bansal', role: 'Chief Technology Officer', img: teamImgs[1] },
-  { name: 'Poonam', role: 'Business Development Executive', img: teamImgs[2] },
+  { name: 'Vishal Bansal', role: 'Chief Executive Officer & Director of IT Strategy', img: '/1.png' },
+  // { name: 'Vishal Bansal', role: 'Chief Technology Officer', img: teamImgs[1] },
+  { name: 'Poonam Garg', role: 'Business Development Executive', img: '/2.png' },
 ];
 
 
@@ -124,13 +125,69 @@ const faqs = [
   { q: 'What makes Suprix Solution the best IT consulting company?', a: 'Our combination of deep technical expertise, industry experience, client-focused approach, and proven track record of successful IT projects makes us a trusted partner for digital transformation and technology consulting.' },
 ];
 
-function AnimatedCounter({ value }: { value: number | string }) {
-  return <span className="stat-value">{value}</span>;
+function AnimatedCounter({ value, suffix = '' }: { value: number | string, suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const counterRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            const numericValue = typeof value === 'string' ? parseInt(value) : value;
+            
+            if (isNaN(numericValue)) {
+              setCount(value as any);
+              return;
+            }
+
+            let start = 1;
+            const end = numericValue;
+            const duration = 2000; // 2 seconds
+            const increment = Math.ceil((end - start) / (duration / 16));
+            
+            const timer = setInterval(() => {
+              start += increment;
+              if (start >= end) {
+                setCount(end);
+                clearInterval(timer);
+              } else {
+                setCount(start);
+              }
+            }, 16);
+
+            return () => clearInterval(timer);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (counterRef.current) {
+      observer.observe(counterRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [value, hasAnimated]);
+
+  return <span ref={counterRef} className="stat-value">{count}{suffix}</span>;
 }
 
 export default function Home() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        videoRef.current?.play();
+      }, 500);
+    }
+  };
 
   // Auto-slide effect
   useEffect(() => {
@@ -192,23 +249,23 @@ export default function Home() {
         {JSON.stringify(structuredData)}
       </script>
       {/* Hero Section */}
-      <section className="hero-section" style={{background: '#fff', padding: '4rem 0', maxWidth: '1200px', margin: '0 auto', overflow: 'visible'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '8rem', flexWrap: 'wrap', position: 'relative'}}>
+      <section className="hero-section" style={{background: '#fff', padding: '2rem 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', position: 'relative'}}>
           {/* Left Side - Main Content */}
-          <motion.div style={{flex: '1', minWidth: '500px', paddingRight: '10rem', paddingLeft: '0', marginLeft: '-4rem', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <motion.div style={{flex: '1', minWidth: '300px', paddingRight: '1rem', paddingLeft: '0', marginLeft: '0', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px', textAlign: 'left'}}>Empowering Business Futures</div>
             <div style={{display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap'}}>
               <h1 style={{
                 boxDecorationBreak: 'clone',
                 boxSizing: 'border-box',
                 color: '#222',
-                display: 'inline',
+                display: 'block',
                 fontFamily: 'Figtree, sans-serif',
-                fontSize: '44px',
+                fontSize: 'clamp(28px, 5vw, 60px)',
                 fontWeight: '500',
                 height: 'auto',
-                letterSpacing: '-1.32px',
-                lineHeight: '52.8px',
+                letterSpacing: '1px',
+                lineHeight: '1.2',
                 marginBlockEnd: '16px',
                 marginBlockStart: '8px',
                 marginInlineEnd: '0px',
@@ -216,7 +273,7 @@ export default function Home() {
                 textAlign: 'left',
                 textSizeAdjust: '100%',
                 unicodeBidi: 'isolate',
-                width: 'auto',
+                width: '100%',
                 WebkitFontSmoothing: 'antialiased',
                 marginLeft: '0',
                 paddingLeft: '0',
@@ -228,11 +285,11 @@ export default function Home() {
                 <a href="/contact" className="cta-btn" style={{
                 backgroundColor: '#f58220', 
                 color: 'white', 
-                marginLeft: '1.5rem',
-                padding: '0.2rem 3.5rem', 
+                marginTop: '1rem',
+                padding: '0.8rem 2rem', 
                 borderRadius: '50px', 
                 textDecoration: 'none', 
-                fontSize: '1.1rem', 
+                fontSize: '1rem', 
                 fontWeight: '700', 
                 display: 'inline-block',
                 boxShadow: '0 4px 15px rgba(245, 130, 32, 0.3)',
@@ -245,15 +302,16 @@ export default function Home() {
           </motion.div>
           
           {/* Right Side - Rating Content */}
-          <motion.div style={{flex: '1', minWidth: '400px', maxWidth: '500px'}} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.1 }}>
-            <div style={{background: '#fff', padding: '2.5rem', borderRadius: '12px', border: '1px solid #e9ecef'}}>
+          <motion.div style={{flex: '1', minWidth: '300px', maxWidth: '500px'}} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.1 }}>
+            <div style={{background: '#fff', padding: '2.5rem', borderRadius: '12px'}}>
               <p style={{
                 color: '#444', 
                 fontSize: '1.1rem', 
                 lineHeight: '1.6', 
                 marginBottom: '2.5rem',
                 fontWeight: '400',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+                textAlign: 'left'
               }}>
                 Welcome to <strong style={{color: '#222', fontWeight: '700'}}>SUPRIX SOLUTION</strong>, An information technology hub where innovation and quality collide. Our specialty is creating unique IT solutions that boost your company's productivity.
               </p>
@@ -262,11 +320,34 @@ export default function Home() {
               <div style={{marginBottom: '1.5rem'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '0.8rem'}}>
                   <div style={{display: 'flex', gap: '0.3rem'}}>
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} style={{color: '#ffd700', fontSize: '1.6rem'}}>★</span>
-                    ))}
+                    {[...Array(5)].map((_, i) => {
+                      const rating = 4.7;
+                      const isFilled = i < Math.floor(rating);
+                      const isPartial = i === Math.floor(rating) && rating % 1 !== 0;
+                      const partialWidth = isPartial ? `${(rating % 1) * 100}%` : '0%';
+                      
+                      return (
+                        <span key={i} style={{
+                          position: 'relative',
+                          fontSize: '1rem',
+                          display: 'inline-block'
+                        }}>
+                          <span style={{color: '#ddd'}}>★</span>
+                          {(isFilled || isPartial) && (
+                            <span style={{
+                              position: 'absolute',
+                              left: 0,
+                              top: 0,
+                              color: '#ffd700',
+                              overflow: 'hidden',
+                              width: isFilled ? '100%' : partialWidth
+                            }}>★</span>
+                          )}
+                        </span>
+                      );
+                    })}
                   </div>
-                  <div style={{fontSize: '2rem', fontWeight: '700', color: '#222', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>4.9/5 Rating</div>
+                  <div style={{fontSize: '1.3rem', fontWeight: '700', color: '#222', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>4.7/5 Rating</div>
                 </div>
                 <div style={{color: '#666', fontSize: '1rem', marginBottom: '1.5rem', fontWeight: '400'}}>From over 100+ reviews.</div>
               </div>
@@ -318,8 +399,8 @@ export default function Home() {
       </section>
       
       {/* Feature Cards Section */}
-      <section style={{background: '#fff', padding: '4rem 2rem', maxWidth: '1400px', margin: '0 auto'}}>
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem'}}>
+      <section style={{background: '#fff', padding: '2rem 1rem', maxWidth: '1400px', margin: '0 auto'}}>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
           {/* Video Card */}
           <motion.div 
             style={{
@@ -335,11 +416,13 @@ export default function Home() {
               justifyContent: 'flex-end',
               backgroundImage: 'url("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80")',
               backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundPosition: 'center',
+              cursor: 'pointer'
             }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            onClick={handlePlayVideo}
           >
             <div style={{
               position: 'absolute',
@@ -362,13 +445,26 @@ export default function Home() {
               justifyContent: 'center',
               fontSize: '2rem',
               cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+              transition: 'all 0.3s ease',
+              transform: 'scale(1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)';
+              e.currentTarget.style.backgroundColor = '#f58220';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(245, 130, 32, 0.4)';
+              e.currentTarget.style.color = 'white';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+              e.currentTarget.style.color = 'black';
             }}>
               ▶
             </div>
             <div style={{position: 'relative', zIndex: 2}}>
               <h3 style={{fontSize: '1.6rem', fontWeight: '700', marginBottom: '0.8rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>How Does It Work?</h3>
-              <p style={{fontSize: '1rem', opacity: '0.9', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>Play Video</p>
             </div>
           </motion.div>
 
@@ -389,7 +485,9 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <div>
-              <div style={{fontSize: '3.5rem', fontWeight: '700', color: '#f58220', marginBottom: '1rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>95+</div>
+              <div style={{fontSize: '3.5rem', fontWeight: '700', color: '#f58220', marginBottom: '1rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>
+                <AnimatedCounter value={95} suffix="+" />
+              </div>
               <p style={{fontSize: '1rem', opacity: '0.8', marginBottom: '1.5rem', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>Unlock your business potential with Suprix</p>
               <ul style={{listStyle: 'none', padding: 0, marginBottom: '2rem'}}>
                 <li style={{marginBottom: '0.8rem', fontSize: '1rem', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>• We Will Make Your Business Growth</li>
@@ -398,26 +496,11 @@ export default function Home() {
                 Join with us to take advantage of technology's potential and prepare for a digital future
               </p>
             </div>
-            <div style={{marginTop: 'auto'}}>
-              <a href="/about" style={{
-                color: 'white', 
-                textDecoration: 'none', 
-                fontSize: '1rem', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.5rem',
-                fontWeight: '600',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-              }}>
-                Learn More →
-              </a>
-            </div>
           </motion.div>
 
           {/* Services Card */}
           <motion.div 
             style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               borderRadius: '20px',
               padding: '2.5rem',
               color: 'white',
@@ -427,7 +510,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
-              backgroundImage: 'url("https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=400&q=80")',
+              backgroundImage: 'url("https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=400&q=80")',
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
@@ -441,7 +524,7 @@ export default function Home() {
               left: '0',
               right: '0',
               bottom: '0',
-              background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.9) 100%)'
+              background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.15) 100%)'
             }}></div>
             <div style={{
               position: 'absolute',
@@ -468,8 +551,21 @@ export default function Home() {
                   fontSize: '0.9rem',
                   fontWeight: '600',
                   backdropFilter: 'blur(10px)',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-                }}>App development</span>
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.4)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onClick={() => window.location.href = '/services'}>App development</span>
                 <span style={{
                   background: 'rgba(255,255,255,0.25)',
                   padding: '0.6rem 1.2rem',
@@ -477,8 +573,21 @@ export default function Home() {
                   fontSize: '0.9rem',
                   fontWeight: '600',
                   backdropFilter: 'blur(10px)',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-                }}>Web development</span>
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.4)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onClick={() => window.location.href = '/services'}>Web development</span>
                 <span style={{
                   background: 'rgba(255,255,255,0.25)',
                   padding: '0.6rem 1.2rem',
@@ -486,8 +595,21 @@ export default function Home() {
                   fontSize: '0.9rem',
                   fontWeight: '600',
                   backdropFilter: 'blur(10px)',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-                }}>It consulting</span>
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.4)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onClick={() => window.location.href = '/services'}>It consulting</span>
               </div>
               <a href="/services" style={{
                 background: '#f58220',
@@ -525,7 +647,7 @@ export default function Home() {
             </div>
             <div style={{background: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
               <h3 style={{color: '#f58220', marginBottom: '1rem'}}>Proven Track Record</h3>
-              <p style={{color: '#666'}}>Successfully delivered 350+ IT projects with 99% client satisfaction rate.</p>
+              <p style={{color: '#666'}}>Successfully delivered 50+ IT projects with 99% client satisfaction rate.</p>
             </div>
             <div style={{background: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
               <h3 style={{color: '#f58220', marginBottom: '1rem'}}>24/7 Support</h3>
@@ -545,7 +667,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <AnimatedCounter value={stat.value} />
+              <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               <span className="stat-label">{stat.label}</span>
             </motion.div>
           ))}
@@ -627,7 +749,7 @@ export default function Home() {
               transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
-            {services.map((service, idx) => (
+            {services.map((service) => (
               <motion.div
                 className="service-slide"
                 key={service.title}
@@ -657,7 +779,24 @@ export default function Home() {
       <section className="video-demo-section" style={{background: '#f5f5f5', textAlign: 'center', padding: '4rem 1rem'}}>
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>How Does It Work?</motion.h2>
         <div style={{margin: '2rem auto', maxWidth: 600}}>
-          <iframe width="100%" height="340" src="https://www.youtube.com/embed/2e1x5Rk2KjA" title="Suprix Solution Demo" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <video 
+            ref={videoRef}
+            width="100%" 
+            height="340" 
+            controls 
+            style={{borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', cursor: 'pointer'}}
+            onClick={(e) => {
+              const video = e.currentTarget;
+              if (video.paused) {
+                video.play();
+              } else {
+                video.pause();
+              }
+            }}
+          >
+            <source src="/suprx.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
       </section>
       {/* Portfolio/Case Studies Section */}

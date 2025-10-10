@@ -358,10 +358,28 @@ export default function Blog() {
           <motion.div
             className={`blog-detail-card${openIdx === idx ? ' open' : ''}`}
             key={blog.id}
+            data-blog-id={blog.id}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
-            onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+            onClick={() => {
+              const newOpenIdx = openIdx === idx ? null : idx;
+              setOpenIdx(newOpenIdx);
+              
+              // Scroll to ensure the expanded content is visible
+              if (newOpenIdx !== null) {
+                setTimeout(() => {
+                  const element = document.querySelector(`[data-blog-id="${blog.id}"]`);
+                  if (element) {
+                    element.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'center',
+                      inline: 'nearest'
+                    });
+                  }
+                }, 100);
+              }
+            }}
             style={{
               cursor: 'pointer',
               marginBottom: '1.5rem',
@@ -372,7 +390,7 @@ export default function Blog() {
               boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'visible'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
@@ -452,15 +470,19 @@ export default function Blog() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  style={{overflow: 'hidden'}}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  style={{overflow: 'visible'}}
                 >
                   <div style={{
                     background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
                     padding: '1.5rem',
                     borderRadius: '12px',
                     border: '1px solid #e2e8f0',
-                    marginTop: '1rem'
+                    marginTop: '1rem',
+                    position: 'relative',
+                    zIndex: 10,
+                    maxHeight: 'none',
+                    overflow: 'visible'
                   }}>
                     <p style={{
                       marginTop: 0, 
@@ -480,6 +502,22 @@ export default function Blog() {
                     }}>
                       {blog.details}
                     </div>
+                    
+                    {/* Full Content */}
+                    {blog.content && (
+                      <div style={{
+                        color: '#374151', 
+                        lineHeight: '1.8',
+                        fontSize: '1rem',
+                        marginBottom: '1.5rem',
+                        padding: '1rem',
+                        background: 'rgba(255, 255, 255, 0.7)',
+                        borderRadius: '8px',
+                        border: '1px solid #e5e7eb'
+                      }}>
+                        {blog.content}
+                      </div>
+                    )}
                     
                     {/* Tags */}
                     <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -502,7 +540,7 @@ export default function Blog() {
                       ))}
                     </div>
                     
-                    <a 
+                    {/* <a 
                       href={blog.link} 
                       className="learn-more" 
                       style={{
@@ -532,7 +570,7 @@ export default function Blog() {
                     >
                       Read Full Article 
                       <span style={{ fontSize: '1.1rem' }}>→</span>
-                    </a>
+                    </a> */}
                   </div>
                 </motion.div>
               )}

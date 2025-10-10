@@ -11,50 +11,7 @@ import Contact from './pages/Contact';
 import Home from './pages/Home';
 import { useEffect } from 'react';
 
-const stats = [
-  { label: 'Years of Experience', value: 3 },
-  { label: 'Projects Completed', value: 100 },
-  { label: 'Satisfied Clients', value: '99%' },
-  { label: 'Team Members', value: 20 },
-];
-
-const clients = [
-  'ClientOne', 'ClientTwo', 'ClientThree', 'ClientFour', 'ClientFive', 'ClientSix',
-];
-
-const caseStudies = [
-  { title: 'Pharmaceutical App', desc: 'Empowering pharma with innovative IT solutions.', img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80', link: '#' },
-  { title: 'E-commerce Web Design', desc: 'Seamless shopping experiences for fashion brands.', img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=400&q=80', link: '#' },
-  { title: 'IT Consulting', desc: 'Strategic business transformation for enterprises.', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80', link: '#' },
-];
-
-const team = [
-  { name: 'Akshay Kumar', role: 'CEO', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80' },
-  { name: 'Priya Sharma', role: 'Lead Developer', img: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=150&q=80' },
-  { name: 'Rahul Verma', role: 'UI/UX Designer', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80' },
-];
-
-const blogs = [
-  { title: 'Why Digital Transformation Matters', date: 'July 2025', link: '#' },
-  { title: 'Top 5 Cloud Migration Tips', date: 'June 2024', link: '#' },
-];
-
-const faqs = [
-  { q: 'What services do you provide?', a: 'We offer web/app development, IT consulting, cloud, UI/UX, and more.' },
-  { q: 'Do you offer custom solutions?', a: 'Yes, we tailor solutions for each client and industry.' },
-  { q: 'How do I get started?', a: 'Contact us for a free consultation or fill out the inquiry form.' },
-];
-
-const awards = [
-  'Best IT Company 2023',
-  'Top 50 Tech Innovators',
-  'ISO 9001 Certified',
-];
-
-function AnimatedCounter({ value }: { value: number | string }) {
-  // Simple static for now; can be animated with useEffect and state
-  return <span className="stat-value">{value}</span>;
-}
+// Removed unused variables - these are defined in individual page components
 
 function NotFound() {
   return (
@@ -68,10 +25,19 @@ function NotFound() {
 
 function App() {
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location]);
-  const [faqOpen, setFaqOpen] = useState<number | null>(null);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <HelmetProvider>
@@ -94,17 +60,41 @@ function App() {
           <nav className="navbar">
             <motion.div className="navbar-brand" initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
               whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }}>
-              <Link to="/">
+              <Link to="/" onClick={closeMobileMenu}>
                 <img src={logo} alt="Suprix Solution Logo" className="logo-img" />
               </Link>
             </motion.div>
-            <ul className="nav-links">
-              <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link></li>
-              <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""}>Services</Link></li>
-              <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link></li>
-              <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""}>Blog</Link></li>
-              <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Contact</Link></li>
+            
+            {/* Desktop Navigation */}
+            <ul className="nav-links desktop-nav">
+              <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
+              <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
+              <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
+              <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
+              <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
             </ul>
+
+            {/* Mobile Hamburger Button */}
+            <button 
+              className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle mobile menu"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            {/* Mobile Navigation Menu */}
+            <div className={`mobile-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+              <ul className="mobile-nav-links">
+                <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
+                <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
+                <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
+                <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
+                <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
+              </ul>
+            </div>
           </nav>
         </header>
         <Routes>
