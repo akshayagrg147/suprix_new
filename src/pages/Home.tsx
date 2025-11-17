@@ -721,7 +721,14 @@ export default function Home() {
       {/* Clients/Industries Section */}
       <section className="clients-section">
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Trusted by Leading Companies Across Industries</motion.h2>
-        <div className="clients-carousel">
+        <div className="clients-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem',
+          maxWidth: '1000px',
+          margin: '2rem auto',
+          justifyContent: 'center'
+        }}>
           {clients.map((client, idx) => (
             <motion.div
               className="client-logo"
@@ -729,6 +736,27 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
+              style={{
+                backgroundColor: 'white',
+                border: '2px solid black',
+                borderRadius: '12px',
+                padding: '1rem 1.5rem',
+                textAlign: 'center',
+                fontWeight: '600',
+                fontSize: '1rem',
+                color: 'black',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
+                cursor: 'default'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+              }}
             >
               <span>{client}</span>
             </motion.div>
