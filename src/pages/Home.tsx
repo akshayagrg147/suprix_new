@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { courses } from '../data/courses';
 
 const serviceImgs = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=96&q=80', // AI/ML
@@ -176,6 +178,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number | string, suffi
 }
 
 export default function Home() {
+  const navigate = useNavigate();
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -625,6 +628,155 @@ export default function Home() {
               }}>More Services...</a>
             </div>
         </motion.div>
+        </div>
+      </section>
+
+      {/* Course Enrollment Section */}
+      <section style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '4rem 1rem', color: 'white'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.7 }}
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: '700',
+              textAlign: 'center',
+              marginBottom: '1rem',
+              color: 'white'
+            }}
+          >
+            Enroll in Our Professional Courses
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0 }} 
+            whileInView={{ opacity: 1 }} 
+            transition={{ duration: 0.7, delay: 0.2 }}
+            style={{
+              textAlign: 'center',
+              fontSize: '1.2rem',
+              marginBottom: '3rem',
+              opacity: 0.95
+            }}
+          >
+            Choose from our comprehensive range of IT courses and kickstart your career
+          </motion.p>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '2rem',
+            marginTop: '2rem'
+          }}>
+            {courses.map((course, idx) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                whileHover={{ scale: 1.05, y: -10 }}
+                style={{
+                  background: 'white',
+                  borderRadius: '20px',
+                  padding: '2rem',
+                  color: '#1e293b',
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+                onClick={() => {
+                  navigate(`/course/${course.id}`);
+                }}
+              >
+                <div>
+                  <div style={{
+                    fontSize: '3.5rem',
+                    marginBottom: '1rem',
+                    textAlign: 'center'
+                  }}>
+                    {course.icon}
+                  </div>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '700',
+                    marginBottom: '0.75rem',
+                    color: '#1e293b',
+                    textAlign: 'center'
+                  }}>
+                    {course.title}
+                  </h3>
+                  <p style={{
+                    fontSize: '0.9rem',
+                    color: '#64748b',
+                    marginBottom: '1rem',
+                    textAlign: 'center',
+                    lineHeight: '1.5'
+                  }}>
+                    {course.description}
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '1.5rem',
+                    fontSize: '0.9rem',
+                    color: '#475569'
+                  }}>
+                    <span>⏱️</span>
+                    <span>{course.duration}</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem',
+                    marginBottom: '1.5rem',
+                    justifyContent: 'center'
+                  }}>
+                    {course.features.slice(0, 3).map((feature, i) => (
+                      <span key={i} style={{
+                        background: '#f1f5f9',
+                        padding: '0.4rem 0.8rem',
+                        borderRadius: '12px',
+                        fontSize: '0.75rem',
+                        color: '#475569',
+                        fontWeight: '500'
+                      }}>
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <button style={{
+                  backgroundColor: '#f58220',
+                  color: 'white',
+                  border: 'none',
+                  padding: '1rem 2rem',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  width: '100%',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 15px rgba(245, 130, 32, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e6731a';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f58220';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+                >
+                  Enroll Now
+                </button>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
       

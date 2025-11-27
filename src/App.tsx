@@ -9,6 +9,8 @@ import Services from './pages/Services';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import Home from './pages/Home';
+import Internship from './pages/Internship';
+import CourseDetail from './pages/CourseDetail';
 import { useEffect } from 'react';
 
 // Removed unused variables - these are defined in individual page components
@@ -69,6 +71,7 @@ function App() {
             <ul className="nav-links desktop-nav">
               <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
               <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
+              <li><Link to="/internship" className={location.pathname === "/internship" ? "active" : ""} onClick={closeMobileMenu}>Internship</Link></li>
               <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
               <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
               <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
@@ -90,6 +93,7 @@ function App() {
               <ul className="mobile-nav-links">
                 <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
                 <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
+                <li><Link to="/internship" className={location.pathname === "/internship" ? "active" : ""} onClick={closeMobileMenu}>Internship</Link></li>
                 <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
                 <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
                 <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
@@ -101,6 +105,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/internship" element={<Internship />} />
+          <Route path="/course/:courseId" element={<CourseDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
