@@ -11,6 +11,10 @@ import Contact from './pages/Contact';
 import Home from './pages/Home';
 import Internship from './pages/Internship';
 import CourseDetail from './pages/CourseDetail';
+import CancellationRefunds from './pages/CancellationRefunds';
+import TermsConditions from './pages/TermsConditions';
+import Shipping from './pages/Shipping';
+import Privacy from './pages/Privacy';
 import { useEffect } from 'react';
 
 // Removed unused variables - these are defined in individual page components
@@ -107,10 +111,23 @@ function App() {
           <Route path="/course/:courseId" element={<CourseDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cancellation-refunds" element={<CancellationRefunds />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/shipping" element={<Shipping />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <footer className="footer">
-          <span>© 2024 Suprix Solution. All Rights Reserved.</span>
+        <footer className="footer" style={{ padding: '2rem 1rem', background: '#1e293b', color: 'white', textAlign: 'center' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.5rem' }}>
+              <Link to="/cancellation-refunds" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Cancellation & Refunds</Link>
+              <Link to="/terms-conditions" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Terms and Conditions</Link>
+              <Link to="/shipping" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Shipping</Link>
+              <Link to="/privacy" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Privacy</Link>
+              <Link to="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Contact Us</Link>
+            </div>
+            <span style={{ fontSize: '0.875rem', opacity: 0.8 }}>© 2024 Suprix Solution. All Rights Reserved.</span>
+          </div>
         </footer>
         {/* Floating Support/Chat Button */}
         <a href="https://wa.me/919485563525?text=Hi%20Suprix%20Solution,%20I%20need%20help%20with%20your%20IT%20services" 

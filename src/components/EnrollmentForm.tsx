@@ -29,7 +29,7 @@ const EMAILJS_ENROLLMENT_TEMPLATE_ID = 'template_wyfl6gq'; // You may want to cr
 const EMAILJS_PUBLIC_KEY = 'cEh-KwwYV9428kPa7';
 const ADMIN_EMAIL = 'akshaygarg147@gmail.com';
 
-export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymentSuccess }: EnrollmentFormProps) {
+export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymentSuccess: _onPaymentSuccess }: EnrollmentFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -269,58 +269,8 @@ Please send the payment link to the student.`
     */
   };
 
-  const addToWaitingList = (enrollmentData: EnrollmentData) => {
-    // Import the utility function
-    import('../utils/waitingList').then(({ addToWaitingList: addToList }) => {
-      addToList(enrollmentData, {
-        address: formData.address,
-        qualification: formData.qualification,
-        experience: formData.experience
-      });
-
-      // You can also send this to your backend API here
-      // fetch('/api/enrollments', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(enrollmentData)
-      // });
-    });
-  };
-
-  const handlePaymentFailure = (response: any, formData: any) => {
-    // Log payment failure
-    console.error('Payment failed:', response);
-    
-    // In a real application, you would:
-    // 1. Call your backend API to process refund
-    // 2. Update the enrollment status
-    // 3. Send notification to student
-    
-    alert(`Payment failed: ${response.error.description || 'Unknown error'}. If amount was deducted, it will be refunded within 5-7 business days.`);
-    
-    // Add to waiting list with failed status for tracking
-    import('../utils/waitingList').then(({ addToWaitingList: addToList }) => {
-      const failedEnrollment: EnrollmentData = {
-        courseId: course.id,
-        courseName: course.title,
-        plan: selectedPlan,
-        amount: planPrice,
-        studentName: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        paymentId: response.error.metadata?.payment_id || 'failed',
-        paymentStatus: 'failed',
-        enrollmentDate: new Date().toISOString()
-      };
-      
-      addToList(failedEnrollment, {
-        address: formData.address,
-        qualification: formData.qualification,
-        experience: formData.experience,
-        error: response.error
-      });
-    });
-  };
+  // Payment-related functions removed as payment gateway is disabled
+  // These can be restored if payment functionality is re-enabled
 
   return (
     <AnimatePresence>
@@ -578,7 +528,7 @@ Please send the payment link to the student.`
                   Enrollment Request Submitted!
                 </div>
                 <div style={{ fontSize: '0.95rem', opacity: 0.95 }}>
-                  We will send the payment link soon to your email ({formData.email})
+                  We will send the payment link soon to your email
                 </div>
               </motion.div>
             )}
