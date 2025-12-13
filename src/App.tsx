@@ -71,7 +71,6 @@ function App() {
             <ul className="nav-links desktop-nav">
               <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
               <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
-              <li><Link to="/internship" className={location.pathname === "/internship" ? "active" : ""} onClick={closeMobileMenu}>Internship</Link></li>
               <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
               <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
               <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
@@ -93,7 +92,6 @@ function App() {
               <ul className="mobile-nav-links">
                 <li><Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={closeMobileMenu}>Home</Link></li>
                 <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""} onClick={closeMobileMenu}>Services</Link></li>
-                <li><Link to="/internship" className={location.pathname === "/internship" ? "active" : ""} onClick={closeMobileMenu}>Internship</Link></li>
                 <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""} onClick={closeMobileMenu}>About</Link></li>
                 <li><Link to="/blog" className={location.pathname === "/blog" ? "active" : ""} onClick={closeMobileMenu}>Blog</Link></li>
                 <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""} onClick={closeMobileMenu}>Contact</Link></li>
