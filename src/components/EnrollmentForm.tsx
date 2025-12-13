@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type Course } from '../data/courses';
+import emailjs from '@emailjs/browser';
 
 interface EnrollmentFormProps {
   course: Course;
@@ -22,6 +23,12 @@ export interface EnrollmentData {
   enrollmentDate: string;
 }
 
+// EmailJS configuration for enrollment emails
+const EMAILJS_SERVICE_ID = 'service_61p4ysl';
+const EMAILJS_ENROLLMENT_TEMPLATE_ID = 'template_wyfl6gq'; // You may want to create a separate template
+const EMAILJS_PUBLIC_KEY = 'cEh-KwwYV9428kPa7';
+const ADMIN_EMAIL = 'akshaygarg147@gmail.com';
+
 export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymentSuccess }: EnrollmentFormProps) {
   const [formData, setFormData] = useState({
     name: '',
@@ -33,6 +40,7 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [emailSent, setEmailSent] = useState(false);
 
   const planPrice = course.price[selectedPlan];
 
@@ -68,6 +76,60 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
     }
   };
 
+  const sendEnrollmentEmail = async () => {
+    try {
+      // Initialize EmailJS
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+
+      // Prepare email template parameters
+      const templateParams = {
+        to_email: ADMIN_EMAIL,
+        from_name: formData.name,
+        from_email: formData.email,
+        student_name: formData.name,
+        student_email: formData.email,
+        student_phone: formData.phone,
+        student_address: formData.address || 'Not provided',
+        qualification: formData.qualification || 'Not provided',
+        experience: formData.experience || 'Not provided',
+        course_name: course.title,
+        course_id: course.id,
+        plan: selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1),
+        amount: planPrice,
+        message: `New Enrollment Request:
+        
+Course: ${course.title}
+Plan: ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)}
+Amount: ₹${planPrice}
+
+Student Details:
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Address: ${formData.address || 'Not provided'}
+Qualification: ${formData.qualification || 'Not provided'}
+Experience: ${formData.experience || 'Not provided'}
+
+Please send the payment link to the student.`
+      };
+
+      // Send email
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_ENROLLMENT_TEMPLATE_ID,
+        templateParams
+      );
+
+      console.log('Enrollment email sent successfully');
+      setEmailSent(true);
+      return true;
+    } catch (error) {
+      console.error('Error sending enrollment email:', error);
+      // Still return true to proceed with payment even if email fails
+      return true;
+    }
+  };
+
   const handlePayment = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -75,6 +137,27 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
       return;
     }
 
+    setIsSubmitting(true);
+
+    // Send enrollment email first
+    try {
+      await sendEnrollmentEmail();
+      // Show success message and close after a delay
+      setTimeout(() => {
+        setIsSubmitting(false);
+        // Don't proceed with payment - just show the message
+        // The email sent state will show the message
+      }, 1000);
+      return; // Exit early - don't proceed with payment gateway
+    } catch (error) {
+      console.error('Error in enrollment process:', error);
+      setIsSubmitting(false);
+      alert('There was an error processing your enrollment. Please try again.');
+      return;
+    }
+
+    // OLD PAYMENT CODE - Commented out as we're not using payment gateway now
+    /*
     setIsSubmitting(true);
 
     try {
@@ -183,6 +266,7 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
       setIsSubmitting(false);
       alert('Payment failed. Please try again.');
     }
+    */
   };
 
   const addToWaitingList = (enrollmentData: EnrollmentData) => {
@@ -475,65 +559,124 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
               />
             </div>
 
+            {/* Success Message */}
+            {emailSent && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  padding: '1.5rem',
+                  borderRadius: '12px',
+                  marginBottom: '1.5rem',
+                  color: 'white',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✅</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                  Enrollment Request Submitted!
+                </div>
+                <div style={{ fontSize: '0.95rem', opacity: 0.95 }}>
+                  We will send the payment link soon to your email ({formData.email})
+                </div>
+              </motion.div>
+            )}
+
             {/* Payment Info */}
-            <div style={{
-              background: '#f8fafc',
-              padding: '1rem',
-              borderRadius: '12px',
-              marginBottom: '1.5rem',
-              fontSize: '0.875rem',
-              color: '#64748b'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <span>🔒</span>
-                <span>Secure payment via Razorpay</span>
+            {!emailSent && (
+              <div style={{
+                background: '#f8fafc',
+                padding: '1rem',
+                borderRadius: '12px',
+                marginBottom: '1.5rem',
+                fontSize: '0.875rem',
+                color: '#64748b'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <span>🔒</span>
+                  <span>Secure enrollment process</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>✅</span>
+                  <span>Payment link will be sent via email</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>✅</span>
-                <span>Refund available if payment fails</span>
-              </div>
-            </div>
+            )}
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: '100%',
-                backgroundColor: isSubmitting ? '#94a3b8' : '#667eea',
-                color: 'white',
-                border: 'none',
-                padding: '1rem 2rem',
-                borderRadius: '12px',
-                fontSize: '1rem',
-                fontWeight: '700',
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!isSubmitting) {
+            {!emailSent && (
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  width: '100%',
+                  backgroundColor: isSubmitting ? '#94a3b8' : '#667eea',
+                  color: 'white',
+                  border: 'none',
+                  padding: '1rem 2rem',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.currentTarget.style.backgroundColor = '#5568d3';
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.currentTarget.style.backgroundColor = '#667eea';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }
+                }}
+              >
+                {isSubmitting ? 'Processing...' : `Pay ₹${planPrice} & Enroll`}
+              </button>
+            )}
+
+            {emailSent && (
+              <button
+                type="button"
+                onClick={onClose}
+                style={{
+                  width: '100%',
+                  backgroundColor: '#667eea',
+                  color: 'white',
+                  border: 'none',
+                  padding: '1rem 2rem',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#5568d3';
                   e.currentTarget.style.transform = 'scale(1.02)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isSubmitting) {
+                }}
+                onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#667eea';
                   e.currentTarget.style.transform = 'scale(1)';
-                }
-              }}
-            >
-              {isSubmitting ? 'Processing...' : `Pay ₹${planPrice} & Enroll`}
-            </button>
+                }}
+              >
+                Close
+              </button>
+            )}
 
-            <p style={{
-              fontSize: '0.875rem',
-              color: '#64748b',
-              textAlign: 'center',
-              marginTop: '1rem'
-            }}>
-              By enrolling, you agree to be added to our waiting list. You'll be notified when the course starts.
-            </p>
+            {!emailSent && (
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                textAlign: 'center',
+                marginTop: '1rem'
+              }}>
+                By enrolling, you agree to be added to our waiting list. You'll be notified when the course starts.
+              </p>
+            )}
           </form>
         </motion.div>
       </motion.div>

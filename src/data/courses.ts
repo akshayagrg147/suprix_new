@@ -79,7 +79,7 @@ export const courses: Course[] = [
   {
     id: 'web-development',
     title: 'Full Stack Web Development Internship',
-    duration: '1-2 Months',
+    duration: '8 Weeks',
     description: 'Master modern web development with HTML, CSS, JavaScript, React, and Node.js. Build real-world projects like E-commerce sites, Portfolio, and Blog CMS.',
     price: {
       basic: 1499,
@@ -97,37 +97,89 @@ export const courses: Course[] = [
       {
         week: 1,
         topics: [
-          'HTML5, CSS3, JavaScript ES6+',
-          'Responsive Design & Flexbox/Grid',
-          'Git & Version Control',
-          'Web Development Tools Setup'
+          'HTML5 Fundamentals & Semantic Elements',
+          'CSS3 Styling & Advanced Selectors',
+          'JavaScript ES6+ Basics & DOM Manipulation',
+          'Responsive Design with Flexbox & CSS Grid',
+          'Git & Version Control Basics',
+          'Web Development Tools Setup (VS Code, Browser DevTools)'
         ]
       },
       {
         week: 2,
         topics: [
-          'React Fundamentals & Components',
-          'State Management & Hooks',
-          'React Router & Navigation',
-          'API Integration Basics'
+          'Advanced JavaScript (Async/Await, Promises)',
+          'JavaScript Modules & ES6+ Features',
+          'Introduction to React & JSX',
+          'React Components & Props',
+          'React State & useState Hook',
+          'Event Handling in React'
         ]
       },
       {
         week: 3,
         topics: [
-          'Node.js & Express Backend',
-          'RESTful APIs Development',
-          'Database Design (MongoDB/SQL)',
-          'Authentication & Security'
+          'React Hooks (useEffect, useContext, useReducer)',
+          'React Router & Navigation',
+          'Forms & Form Validation in React',
+          'API Integration with Fetch & Axios',
+          'State Management Patterns',
+          'Component Lifecycle & Optimization'
         ]
       },
       {
         week: 4,
         topics: [
-          'Full Stack Integration',
+          'Node.js Fundamentals & NPM',
+          'Express.js Framework Setup',
+          'RESTful API Development',
+          'Middleware & Request Handling',
+          'Error Handling & Validation',
+          'Introduction to Databases'
+        ]
+      },
+      {
+        week: 5,
+        topics: [
+          'MongoDB Database Design & Schema',
+          'Mongoose ODM & Database Operations',
+          'User Authentication & Authorization',
+          'JWT Tokens & Session Management',
+          'Password Hashing & Security Best Practices',
+          'API Testing with Postman'
+        ]
+      },
+      {
+        week: 6,
+        topics: [
+          'Full Stack Integration (Frontend + Backend)',
+          'Connecting React to Express APIs',
+          'State Management with Context API',
+          'Error Handling & Loading States',
+          'File Upload & Image Handling',
+          'Real-time Features with WebSockets (Introduction)'
+        ]
+      },
+      {
+        week: 7,
+        topics: [
           'E-commerce Project Development',
-          'Portfolio & Blog CMS Projects',
-          'Deployment & Best Practices'
+          'Shopping Cart Implementation',
+          'Payment Gateway Integration (Stripe/PayPal)',
+          'Portfolio Website Project',
+          'Blog CMS Project with CRUD Operations',
+          'Project Code Review & Best Practices'
+        ]
+      },
+      {
+        week: 8,
+        topics: [
+          'Deployment Strategies & Platforms',
+          'Deploying Frontend (Vercel/Netlify)',
+          'Deploying Backend (Heroku/Railway/AWS)',
+          'Environment Variables & Configuration',
+          'Performance Optimization & SEO',
+          'Final Project Presentation & Portfolio Building'
         ]
       }
     ],

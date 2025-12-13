@@ -153,6 +153,112 @@ export default function CourseDetail() {
         </div>
       </motion.section>
 
+      {/* What You Will Get After Internship - Only for Full Stack Web Development */}
+      {selectedCourse.id === 'web-development' && (
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          style={{ marginBottom: '4rem' }}
+        >
+          <h2 style={{
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            textAlign: 'center',
+            marginBottom: '2rem',
+            color: '#1e293b'
+          }}>
+            What You Will Get After Internship
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            maxWidth: '1000px',
+            margin: '0 auto'
+          }}>
+            {/* Internship Certificate */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                padding: '2.5rem',
+                borderRadius: '20px',
+                color: 'white',
+                textAlign: 'center',
+                boxShadow: '0 10px 40px rgba(102, 126, 234, 0.3)',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <div style={{
+                fontSize: '4rem',
+                marginBottom: '1.5rem'
+              }}>
+                🎓
+              </div>
+              <h3 style={{
+                fontSize: '1.8rem',
+                fontWeight: '700',
+                marginBottom: '1rem'
+              }}>
+                Internship Certificate
+              </h3>
+              <p style={{
+                fontSize: '1.1rem',
+                opacity: 0.95,
+                lineHeight: '1.6'
+              }}>
+                Receive a recognized certificate upon successful completion of your internship, validating your skills and dedication.
+              </p>
+            </motion.div>
+
+            {/* Full Time Opportunity */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              style={{
+                background: 'linear-gradient(135deg, #f58220 0%, #e6731a 100%)',
+                padding: '2.5rem',
+                borderRadius: '20px',
+                color: 'white',
+                textAlign: 'center',
+                boxShadow: '0 10px 40px rgba(245, 130, 32, 0.3)',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <div style={{
+                fontSize: '4rem',
+                marginBottom: '1.5rem'
+              }}>
+                💼
+              </div>
+              <h3 style={{
+                fontSize: '1.8rem',
+                fontWeight: '700',
+                marginBottom: '1rem'
+              }}>
+                Full Time Opportunity
+              </h3>
+              <p style={{
+                fontSize: '1.1rem',
+                opacity: 0.95,
+                lineHeight: '1.6'
+              }}>
+                Outstanding interns may be offered full-time positions based on performance, dedication, and project quality.
+              </p>
+            </motion.div>
+          </div>
+        </motion.section>
+      )}
+
       {/* Detailed Syllabus */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
@@ -332,27 +438,94 @@ export default function CourseDetail() {
               fontSize: '3rem',
               fontWeight: '700',
               color: '#667eea',
-              marginBottom: '1.5rem'
+              marginBottom: '0.5rem'
             }}>
               ₹{selectedCourse.price.basic}
             </div>
+            {selectedCourse.id === 'web-development' && (
+              <div style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#667eea',
+                marginBottom: '1.5rem',
+                padding: '0.5rem 1rem',
+                background: '#f0f4ff',
+                borderRadius: '8px',
+                display: 'inline-block'
+              }}>
+                Weeks 1-3 (Fundamentals)
+              </div>
+            )}
             <ul style={{
               listStyle: 'none',
               padding: 0,
               margin: '0 0 2rem 0',
               textAlign: 'left'
             }}>
-              {selectedCourse.features.slice(0, 3).map((feature, idx) => (
-                <li key={idx} style={{
-                  marginBottom: '0.75rem',
-                  color: '#475569',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}>
-                  <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
-                  {feature}
-                </li>
-              ))}
+              {selectedCourse.id === 'web-development' ? (
+                <>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontWeight: '600'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Weeks 1-3: HTML, CSS, JavaScript & React Basics
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Frontend Development Fundamentals
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Basic Project Building
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#94a3b8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'line-through'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✗</span>
+                    Backend Development
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#94a3b8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'line-through'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✗</span>
+                    Full Stack Projects
+                  </li>
+                </>
+              ) : (
+                selectedCourse.features.slice(0, 3).map((feature, idx) => (
+                  <li key={idx} style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    {feature}
+                  </li>
+                ))
+              )}
             </ul>
             <button style={{
               backgroundColor: '#667eea',
@@ -423,27 +596,101 @@ export default function CourseDetail() {
             <div style={{
               fontSize: '3rem',
               fontWeight: '700',
-              marginBottom: '1.5rem'
+              marginBottom: '0.5rem'
             }}>
               ₹{selectedCourse.price.standard}
             </div>
+            {selectedCourse.id === 'web-development' && (
+              <div style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                marginBottom: '1.5rem',
+                padding: '0.5rem 1rem',
+                background: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                display: 'inline-block'
+              }}>
+                Weeks 1-6 (Full Stack)
+              </div>
+            )}
             <ul style={{
               listStyle: 'none',
               padding: 0,
               margin: '0 0 2rem 0',
               textAlign: 'left'
             }}>
-              {selectedCourse.features.map((feature, idx) => (
-                <li key={idx} style={{
-                  marginBottom: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  opacity: 0.95
-                }}>
-                  <span style={{ marginRight: '0.5rem' }}>✓</span>
-                  {feature}
-                </li>
-              ))}
+              {selectedCourse.id === 'web-development' ? (
+                <>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95,
+                    fontWeight: '600'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    Weeks 1-6: Complete Full Stack Development
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    Frontend (React) & Backend (Node.js)
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    Database Integration (MongoDB)
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    Authentication & Security
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    API Development & Integration
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.7,
+                    textDecoration: 'line-through'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✗</span>
+                    Real Projects & Deployment
+                  </li>
+                </>
+              ) : (
+                selectedCourse.features.map((feature, idx) => (
+                  <li key={idx} style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    opacity: 0.95
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>✓</span>
+                    {feature}
+                  </li>
+                ))
+              )}
             </ul>
             <button style={{
               backgroundColor: '#f58220',
@@ -499,37 +746,114 @@ export default function CourseDetail() {
               fontSize: '3rem',
               fontWeight: '700',
               color: '#f58220',
-              marginBottom: '1.5rem'
+              marginBottom: '0.5rem'
             }}>
               ₹{selectedCourse.price.premium}
             </div>
+            {selectedCourse.id === 'web-development' && (
+              <div style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#f58220',
+                marginBottom: '1.5rem',
+                padding: '0.5rem 1rem',
+                background: '#fff7ed',
+                borderRadius: '8px',
+                display: 'inline-block'
+              }}>
+                Weeks 1-8 (Complete Program)
+              </div>
+            )}
             <ul style={{
               listStyle: 'none',
               padding: 0,
               margin: '0 0 2rem 0',
               textAlign: 'left'
             }}>
-              {selectedCourse.features.map((feature, idx) => (
-                <li key={idx} style={{
-                  marginBottom: '0.75rem',
-                  color: '#475569',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}>
-                  <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
-                  {feature}
-                </li>
-              ))}
-              <li style={{
-                marginTop: '0.5rem',
-                color: '#f58220',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center'
-              }}>
-                <span style={{ marginRight: '0.5rem' }}>⭐</span>
-                Priority Support
-              </li>
+              {selectedCourse.id === 'web-development' ? (
+                <>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontWeight: '600'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Weeks 1-8: Complete Full Stack Program
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    All Standard Features Included
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Real Projects (E-commerce, Portfolio, Blog CMS)
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Deployment & Production Setup
+                  </li>
+                  <li style={{
+                    marginBottom: '0.75rem',
+                    color: '#475569',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                    Performance Optimization & SEO
+                  </li>
+                  <li style={{
+                    marginTop: '0.5rem',
+                    color: '#f58220',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>⭐</span>
+                    Priority Support & Career Guidance
+                  </li>
+                </>
+              ) : (
+                <>
+                  {selectedCourse.features.map((feature, idx) => (
+                    <li key={idx} style={{
+                      marginBottom: '0.75rem',
+                      color: '#475569',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.5rem' }}>✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                  <li style={{
+                    marginTop: '0.5rem',
+                    color: '#f58220',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ marginRight: '0.5rem' }}>⭐</span>
+                    Priority Support
+                  </li>
+                </>
+              )}
             </ul>
             <button style={{
               backgroundColor: '#f58220',
