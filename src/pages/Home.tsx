@@ -256,11 +256,11 @@ export default function Home() {
         {JSON.stringify(structuredData)}
       </script>
       {/* Hero Section */}
-      <section className="hero-section" style={{background: '#fff', padding: '2rem 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible'}}>
+      <section className="hero-section" style={{background: '#fff', padding: '2rem 1rem 0 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', position: 'relative'}}>
           {/* Left Side - Main Content */}
           <motion.div style={{flex: '1', minWidth: '300px', paddingRight: '1rem', paddingLeft: '0', marginLeft: '0', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-            <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px', textAlign: 'left'}}>Empowering Business Futures</div>
+            <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px', textAlign: 'left'}}>For Startups & Growing Businesses</div>
             <div style={{display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap'}}>
               <h1 style={{
                 boxDecorationBreak: 'clone',
@@ -268,7 +268,7 @@ export default function Home() {
                 color: '#222',
                 display: 'block',
                 fontFamily: 'Figtree, sans-serif',
-                fontSize: 'clamp(28px, 5vw, 60px)',
+                fontSize: 'clamp(18px, 3vw, 36px)',
                 fontWeight: '500',
                 height: 'auto',
                 letterSpacing: '1px',
@@ -288,7 +288,9 @@ export default function Home() {
                 left: '0',
                 top: '0'
               }}>
-                Driving Digital Solutions to Elevate Your Business <span style={{color: '#f58220', fontWeight: '500', }}>Future</span>
+                Custom IT Solutions for 
+                Growing Businesses That Need 
+                Scalable, Secure Systems.<br />
                 <a href="/contact" className="cta-btn" style={{
                 backgroundColor: '#f58220', 
                 color: 'white', 
@@ -303,7 +305,7 @@ export default function Home() {
                 transition: 'all 0.3s ease',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                 whiteSpace: 'nowrap'
-              }}>Get Started</a>
+              }}>Free Consultation</a>
               </h1>
             </div>
           </motion.div>
@@ -320,88 +322,64 @@ export default function Home() {
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                 textAlign: 'left'
               }}>
-                Welcome to <strong style={{color: '#222', fontWeight: '700'}}>SUPRIX SOLUTION</strong>, An information technology hub where innovation and quality collide. Our specialty is creating unique IT solutions that boost your company's productivity.
+                We help companies reduce costs, streamline operations, and scale faster with secure, scalable technology—while improving efficiency, enhancing customer experiences, enabling data-driven decisions, and future-proofing businesses.
               </p>
-              
-              {/* Rating Section */}
-              <div style={{marginBottom: '1.5rem'}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '0.8rem'}}>
-                  <div style={{display: 'flex', gap: '0.3rem'}}>
-                    {[...Array(5)].map((_, i) => {
-                      const rating = 4.7;
-                      const isFilled = i < Math.floor(rating);
-                      const isPartial = i === Math.floor(rating) && rating % 1 !== 0;
-                      const partialWidth = isPartial ? `${(rating % 1) * 100}%` : '0%';
-                      
-                      return (
-                        <span key={i} style={{
-                          position: 'relative',
-                          fontSize: '1rem',
-                          display: 'inline-block'
-                        }}>
-                          <span style={{color: '#ddd'}}>★</span>
-                          {(isFilled || isPartial) && (
-                            <span style={{
-                              position: 'absolute',
-                              left: 0,
-                              top: 0,
-                              color: '#ffd700',
-                              overflow: 'hidden',
-                              width: isFilled ? '100%' : partialWidth
-                            }}>★</span>
-                          )}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <div style={{fontSize: '1.3rem', fontWeight: '700', color: '#222', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>4.7/5 Rating</div>
-                </div>
-                <div style={{color: '#666', fontSize: '1rem', marginBottom: '1.5rem', fontWeight: '400'}}>From over 100+ reviews.</div>
-              </div>
-              
-              {/* Profile Pictures */}
-              <div style={{display: 'flex', alignItems: 'center', gap: '0.8rem'}}>
-                <div style={{display: 'flex', alignItems: 'center'}}>
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=reviewer1&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=male" alt="Reviewer 1" style={{
-                    width: '45px', 
-                    height: '45px', 
-                    borderRadius: '50%', 
-                    border: '2px solid white', 
-                    marginRight: '-8px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                  }} />
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=reviewer2&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=female" alt="Reviewer 2" style={{
-                    width: '45px', 
-                    height: '45px', 
-                    borderRadius: '50%', 
-                    border: '2px solid white', 
-                    marginRight: '-8px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                  }} />
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=reviewer3&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&gender=male" alt="Reviewer 3" style={{
-                    width: '45px', 
-                    height: '45px', 
-                    borderRadius: '50%', 
-                    border: '2px solid white',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                  }} />
-                </div>
-                <div style={{
-                  width: '45px', 
-                  height: '45px', 
-                  borderRadius: '50%', 
-                  backgroundColor: '#f58220', 
-                  color: 'white', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  fontWeight: '800', 
-                  fontSize: '1rem',
-                  boxShadow: '0 2px 8px rgba(245, 130, 32, 0.3)'
-                }}>100+</div>
-              </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+      
+      {/* Trusted by Leading Companies Section */}
+      <section style={{background: '#fff', padding: '0 1rem 3rem 1rem', maxWidth: '1200px', margin: '-7rem auto 0 auto'}}>
+        <h2 style={{
+          textAlign: 'center',
+          fontSize: '1.8rem',
+          fontWeight: '700',
+          color: '#222',
+          marginBottom: '0.8rem',
+          marginTop: '0',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
+        }}>
+          Trusted by Leading Companies Across Industries
+        </h2>
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'center',
+          flexWrap: 'nowrap',
+          alignItems: 'center',
+          overflowX: 'auto'
+        }}>
+          {['HCL Healthcare', 'Vylee', 'Mafatlal Industries', 'Vridhee', 'Schoolnet', 'Chopsy Tracking'].map((client) => (
+            <div
+              key={client}
+              style={{
+                backgroundColor: 'white',
+                border: '2px solid black',
+                borderRadius: '12px',
+                padding: '1rem 1.5rem',
+                textAlign: 'center',
+                fontWeight: '600',
+                fontSize: '1rem',
+                color: 'black',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
+                cursor: 'default',
+                flexShrink: 0,
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+              }}
+            >
+              {client}
+            </div>
+          ))}
         </div>
       </section>
       
@@ -1031,54 +1009,6 @@ export default function Home() {
               <p>{cap.desc}</p>
             </motion.div>
           ))}
-        </div>
-      </section>
-      {/* Clients/Industries Section */}
-      <section className="clients-section">
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Trusted by Leading Companies Across Industries</motion.h2>
-        <div className="clients-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          maxWidth: '1000px',
-          margin: '2rem auto',
-          justifyContent: 'center'
-        }}>
-          {clients.map((client, idx) => (
-            <motion.div
-              className="client-logo"
-              key={client}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              style={{
-                backgroundColor: 'white',
-                border: '2px solid black',
-                borderRadius: '12px',
-                padding: '1rem 1.5rem',
-                textAlign: 'center',
-                fontWeight: '600',
-                fontSize: '1rem',
-                color: 'black',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease',
-                cursor: 'default'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-              }}
-            >
-              <span>{client}</span>
-            </motion.div>
-          ))}
-        </div>
-        <div style={{marginTop: 24, color: '#888', fontSize: 15}}>
-          <b>Industries:</b> {industries.join(', ')}
         </div>
       </section>
       {/* Services Section */}
