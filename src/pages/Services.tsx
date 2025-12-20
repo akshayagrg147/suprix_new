@@ -123,6 +123,19 @@ const services = [
     ],
     details: 'Our managed IT services team provides reliable, round-the-clock support and proactive maintenance, allowing you to focus on your core business while we handle all your technology needs.'
   },
+  {
+    icon: '🏢',
+    title: 'ERP System Development & Implementation',
+    desc: 'Comprehensive Enterprise Resource Planning (ERP) solutions to integrate and streamline all your business processes, from finance and HR to supply chain and customer management.',
+    features: [
+      'Custom ERP system development & integration',
+      'ERP implementation & migration services',
+      'Finance, HR, inventory & supply chain modules',
+      'ERP customization & third-party integrations',
+      'ERP training & ongoing support services',
+    ],
+    details: 'Our ERP experts design and implement comprehensive enterprise resource planning systems that unify your business operations, improve efficiency, reduce costs, and provide real-time insights across all departments. We offer both custom ERP development and implementation of leading ERP platforms tailored to your industry needs.'
+  },
 ];
 
 export default function Services() {
