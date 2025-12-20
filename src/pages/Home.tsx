@@ -310,7 +310,7 @@ export default function Home() {
           </motion.div>
           
           {/* Right Side - Rating Content */}
-          <motion.div style={{flex: '1', minWidth: '300px', maxWidth: '500px', marginBottom: '0'}} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.1 }}>
+          <motion.div style={{flex: '1', minWidth: '300px', paddingRight: '1rem', paddingLeft: '0', marginLeft: '0', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <div style={{background: '#fff', padding: '2.5rem 2.5rem 0 2.5rem', borderRadius: '12px', marginBottom: '0'}}>
               <p style={{
                 color: '#444', 
