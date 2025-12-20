@@ -76,6 +76,7 @@ const services = [
   { title: 'Cloud Computing Solutions', desc: 'Comprehensive cloud migration, management, and optimization services for scalability.', img: serviceImgs[4] },
   { title: 'DevOps & IT Automation', desc: 'Streamlined DevOps practices and IT automation for faster, reliable deployments.', img: serviceImgs[5] },
   { title: 'IT Consulting & Strategy', desc: 'Expert IT consulting services to align technology with your business objectives.', img: serviceImgs[5] },
+  { title: 'ERP System Development', desc: 'Comprehensive ERP solutions to integrate and streamline all your business processes.', img: serviceImgs[0] },
 ];
 
 const caseStudies = [
@@ -92,7 +93,6 @@ const team = [
   // { name: 'Vishal Bansal', role: 'Chief Technology Officer', img: teamImgs[1] },
   { name: 'Poonam Garg', role: 'Business Development Executive', img: '/2.png' },
 ];
-
 
 const testimonials = [
   '“The engagement led to significant numbers of users and 4.8 ratings in the app store, exceeding our business goals. Suprix Solution executed a smooth workflow through regular standups and effective communication. The team was hard-working, dedicated, and professional.”',
@@ -256,8 +256,8 @@ export default function Home() {
         {JSON.stringify(structuredData)}
       </script>
       {/* Hero Section */}
-      <section className="hero-section" style={{background: '#fff', padding: '2rem 1rem 0 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', position: 'relative'}}>
+      <section className="hero-section" style={{background: '#fff', padding: '10.5rem 1rem 0 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible', paddingBottom: '0', minHeight: 'auto'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', position: 'relative', marginBottom: '0'}}>
           {/* Left Side - Main Content */}
           <motion.div style={{flex: '1', minWidth: '300px', paddingRight: '1rem', paddingLeft: '0', marginLeft: '0', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <div style={{color: '#666', fontSize: '1rem', marginBottom: '0.8rem', fontWeight: '500', letterSpacing: '0.3px', textAlign: 'left'}}>For Startups & Growing Businesses</div>
@@ -268,11 +268,11 @@ export default function Home() {
                 color: '#222',
                 display: 'block',
                 fontFamily: 'Figtree, sans-serif',
-                fontSize: 'clamp(18px, 3vw, 36px)',
+                fontSize: 'clamp(20px, 3.5vw, 32px)',
                 fontWeight: '500',
                 height: 'auto',
-                letterSpacing: '1px',
-                lineHeight: '1.2',
+                letterSpacing: '0.5px',
+                lineHeight: '1.4',
                 marginBlockEnd: '16px',
                 marginBlockStart: '8px',
                 marginInlineEnd: '0px',
@@ -286,11 +286,10 @@ export default function Home() {
                 paddingLeft: '0',
                 position: 'relative',
                 left: '0',
-                top: '0'
+                top: '0',
+                maxWidth: '600px'
               }}>
-                Custom IT Solutions for 
-                Growing Businesses That Need 
-                Scalable, Secure Systems.<br />
+                Custom IT Solutions for Growing Businesses That Need Scalable, Secure <span style={{color: '#f58220', fontWeight: '500', }}>Systems. </span>
                 <a href="/contact" className="cta-btn" style={{
                 backgroundColor: '#f58220', 
                 color: 'white', 
@@ -305,81 +304,121 @@ export default function Home() {
                 transition: 'all 0.3s ease',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                 whiteSpace: 'nowrap'
-              }}>Free Consultation</a>
+              }}>Get a Free Consultation</a>
               </h1>
             </div>
           </motion.div>
           
           {/* Right Side - Rating Content */}
-          <motion.div style={{flex: '1', minWidth: '300px', maxWidth: '500px'}} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.1 }}>
-            <div style={{background: '#fff', padding: '2.5rem', borderRadius: '12px'}}>
+          <motion.div style={{flex: '1', minWidth: '300px', maxWidth: '500px', marginBottom: '0'}} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.1 }}>
+            <div style={{background: '#fff', padding: '2.5rem 2.5rem 0 2.5rem', borderRadius: '12px', marginBottom: '0'}}>
               <p style={{
                 color: '#444', 
                 fontSize: '1.1rem', 
                 lineHeight: '1.6', 
-                marginBottom: '2.5rem',
+                marginBottom: '0',
+                paddingBottom: '0',
                 fontWeight: '400',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                 textAlign: 'left'
               }}>
-                We help companies reduce costs, streamline operations, and scale faster with secure, scalable technology—while improving efficiency, enhancing customer experiences, enabling data-driven decisions, and future-proofing businesses.
+We help companies reduce costs, streamline operations, and scale faster with secure, scalable technology. Our solutions are built to improve efficiency, enhance performance, and support long-term growth.
               </p>
             </div>
           </motion.div>
         </div>
       </section>
-      
-      {/* Trusted by Leading Companies Section */}
-      <section style={{background: '#fff', padding: '0 1rem 3rem 1rem', maxWidth: '1200px', margin: '-7rem auto 0 auto'}}>
-        <h2 style={{
-          textAlign: 'center',
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#222',
-          marginBottom: '0.8rem',
-          marginTop: '0',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-        }}>
-          Trusted by Leading Companies Across Industries
-        </h2>
+      {/* Clients/Industries Section */}
+      <section className="clients-section" style={{
+        paddingTop: '0', 
+        marginTop: '5rem', 
+        paddingBottom: '1rem', 
+        marginBottom: '5px',
+        background: '#fff',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+        width: '100%'
+      }}>
+        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }} style={{marginTop: '0', marginBottom: '0.5rem', paddingTop: '0'}}>Trusted by Leading Companies Across Industries</motion.h2>
         <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          flexWrap: 'nowrap',
-          alignItems: 'center',
-          overflowX: 'auto'
+          overflow: 'hidden',
+          width: '100%',
+          maxWidth: '1150px',
+          margin: '0.5rem auto',
+          padding: '4px 1rem 0 1rem',
+          position: 'relative'
         }}>
-          {['HCL Healthcare', 'Vylee', 'Mafatlal Industries', 'Vridhee', 'Schoolnet', 'Chopsy Tracking'].map((client) => (
-            <div
-              key={client}
-              style={{
-                backgroundColor: 'white',
-                border: '2px solid black',
-                borderRadius: '12px',
-                padding: '1rem 1.5rem',
-                textAlign: 'center',
-                fontWeight: '600',
-                fontSize: '1rem',
-                color: 'black',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease',
-                cursor: 'default',
-                flexShrink: 0,
-                whiteSpace: 'nowrap'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-              }}
-            >
-              {client}
-            </div>
-          ))}
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            animation: 'scroll 30s linear infinite',
+            width: 'fit-content'
+          }}>
+            {/* First set of clients */}
+            {clients.map((client, idx) => (
+              <div
+                key={`client-1-${idx}`}
+                style={{
+                  backgroundColor: 'white',
+                  border: '2px solid black',
+                  borderRadius: '12px',
+                  padding: '1rem 1.5rem',
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  color: 'black',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'default',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                }}
+              >
+                <span>{client}</span>
+              </div>
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {clients.map((client, idx) => (
+              <div
+                key={`client-2-${idx}`}
+                style={{
+                  backgroundColor: 'white',
+                  border: '2px solid black',
+                  borderRadius: '12px',
+                  padding: '1rem 1.5rem',
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  color: 'black',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'default',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                }}
+              >
+                <span>{client}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{marginTop: 24, color: '#888', fontSize: 15, maxWidth: '1150px', margin: '24px auto 0 auto', padding: '0 1rem', textAlign: 'left'}}>
+          <b>Industries:</b> {industries.join(', ')}
         </div>
       </section>
       
@@ -1011,6 +1050,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+    
       {/* Services Section */}
       <section id="services" className="services-section">
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Comprehensive IT Services & Digital Solutions | Software Development Company</motion.h2>
@@ -1018,7 +1058,7 @@ export default function Home() {
           <div 
             className="services-slideshow"
             style={{
-              transform: `translateX(-${currentSlide * (100 / 7)}%)`,
+              transform: `translateX(-${currentSlide * (100 / services.length)}%)`,
               transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
