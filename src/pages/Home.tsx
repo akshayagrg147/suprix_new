@@ -256,7 +256,7 @@ export default function Home() {
         {JSON.stringify(structuredData)}
       </script>
       {/* Hero Section */}
-      <section className="hero-section" style={{background: '#fff', padding: '10.5rem 1rem 0 1rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible', paddingBottom: '0', minHeight: 'auto'}}>
+      <section className="hero-section" style={{background: '#fff', padding: '10.5rem 1rem 0 2rem', maxWidth: '1150px', margin: '0 auto', overflow: 'visible', paddingBottom: '0', minHeight: 'auto'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', position: 'relative', marginBottom: '0'}}>
           {/* Left Side - Main Content */}
           <motion.div style={{flex: '1', minWidth: '300px', paddingRight: '1rem', paddingLeft: '0', marginLeft: '0', paddingTop: '0', paddingBottom: '0', position: 'relative', left: '0'}} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
@@ -423,7 +423,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
       </section>
       
       {/* Feature Cards Section */}
-      <section style={{background: '#fff', padding: '2rem 1rem', maxWidth: '1400px', margin: '0 auto'}}>
+      <section style={{background: '#fff', padding: '2rem 1rem 2rem 5rem', maxWidth: '1400px', margin: '0 auto'}}>
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
           {/* Video Card */}
           <motion.div 
@@ -653,7 +653,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
       </section>
 
       {/* Course Enrollment Section */}
-      <section style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '4rem 1rem', color: 'white'}}>
+      <section style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '2rem 1rem 2rem 5rem', color: 'white'}}>
         <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <motion.h2 
             initial={{ opacity: 0, y: 30 }} 
