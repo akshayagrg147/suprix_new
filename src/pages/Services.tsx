@@ -1,7 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { services as servicesData } from '../data/services';
 
-const services = [
+// Extended services list with additional services not in the detail pages
+const additionalServices = [
   {
     icon: '💡',
     title: 'Digital Transformation Services',
@@ -13,18 +16,6 @@ const services = [
       'Change management & digital adoption',
     ],
     details: 'Our digital transformation consulting services help businesses reimagine their operations for the digital age, leveraging cutting-edge technologies and industry best practices to drive growth, efficiency, and competitive advantage.'
-  },
-  {
-    icon: '🤖',
-    title: 'AI & Machine Learning Solutions',
-    desc: 'Advanced artificial intelligence and machine learning services to drive innovation, automate business processes, and extract actionable insights from your data.',
-    features: [
-      'Custom AI/ML model development & deployment',
-      'Predictive analytics & business intelligence',
-      'Natural language processing & chatbots',
-      'Computer vision & image recognition',
-    ],
-    details: 'Our AI consulting team builds and deploys cutting-edge machine learning solutions tailored to your business needs, from intelligent chatbots to advanced predictive analytics, helping you stay ahead of the competition in the digital age.'
   },
   {
     icon: '📱',
@@ -40,42 +31,6 @@ const services = [
     details: 'Our expert software development team delivers robust, scalable, and user-friendly applications that drive user engagement and deliver measurable business results across all platforms.'
   },
   {
-    icon: '🌐',
-    title: 'Web Development Services',
-    desc: 'Professional web development services creating modern, responsive, and SEO-optimized websites to enhance your online presence and drive business growth.',
-    features: [
-      'Corporate & e-commerce website development',
-      'Content management systems (WordPress, Headless CMS)',
-      'Website performance optimization & speed enhancement',
-      'Web accessibility compliance & SEO optimization',
-    ],
-    details: 'Our web development team creates beautiful, high-performing websites that effectively represent your brand, improve user experience, and convert visitors into customers while maintaining optimal search engine visibility.'
-  },
-  {
-    icon: '☁️',
-    title: 'Cloud Computing Solutions',
-    desc: 'Comprehensive cloud migration, management, and optimization services for AWS, Azure, and Google Cloud platforms.',
-    features: [
-      'Cloud architecture design & migration services',
-      'DevOps automation & cloud deployment',
-      'Cloud cost optimization & resource management',
-      'Disaster recovery & backup solutions',
-    ],
-    details: 'Our cloud computing experts help businesses leverage the full power of cloud technology for enhanced agility, scalability, cost efficiency, and improved business performance.'
-  },
-  {
-    icon: '🔒',
-    title: 'Cybersecurity Services',
-    desc: 'Comprehensive cybersecurity solutions to protect your business from evolving cyber threats and ensure regulatory compliance.',
-    features: [
-      'Vulnerability assessment & penetration testing',
-      'Security audits & compliance management',
-      'Identity & access management solutions',
-      '24/7 security monitoring & incident response',
-    ],
-    details: 'Our cybersecurity experts safeguard your digital assets with proactive security solutions, industry best practices, and comprehensive threat protection strategies.'
-  },
-  {
     icon: '🔗',
     title: 'IT Consulting & Strategic Planning',
     desc: 'Expert IT consulting services to align technology strategy with your business objectives and drive sustainable growth.',
@@ -86,30 +41,6 @@ const services = [
       'Vendor selection & technology procurement',
     ],
     details: 'Our experienced IT consultants provide strategic guidance, technology assessment, and hands-on support to maximize your technology investments and ensure successful digital transformation initiatives.'
-  },
-  {
-    icon: '📊',
-    title: 'Business Intelligence & Data Analytics',
-    desc: 'Transform your business data into actionable insights with advanced business intelligence and analytics solutions.',
-    features: [
-      'Interactive dashboards & business reporting',
-      'Data warehousing & data lake solutions',
-      'Advanced data visualization & reporting',
-      'Predictive analytics & machine learning insights',
-    ],
-    details: 'Our data analytics experts help businesses unlock the full value of their data through comprehensive business intelligence solutions, enabling smarter, data-driven decision-making and improved business performance.'
-  },
-  {
-    icon: '🛠️',
-    title: 'DevOps & IT Automation Services',
-    desc: 'Accelerate software delivery and improve operational efficiency with DevOps best practices and advanced automation solutions.',
-    features: [
-      'CI/CD pipeline development & optimization',
-      'Infrastructure as code & cloud automation',
-      'Containerization (Docker, Kubernetes)',
-      'Application monitoring & logging solutions',
-    ],
-    details: 'Our DevOps engineering team streamlines your software development lifecycle, implementing automation tools and best practices for faster delivery, improved quality, and enhanced system reliability.'
   },
   {
     icon: '🧑‍💼',
@@ -138,6 +69,20 @@ const services = [
   },
 ];
 
+// Combine services from data file with additional services
+const allServices = [
+  ...servicesData.map(service => ({
+    ...service,
+    desc: service.description,
+    details: service.detailedDescription,
+    hasDetailPage: true
+  })),
+  ...additionalServices.map(service => ({
+    ...service,
+    hasDetailPage: false
+  }))
+];
+
 export default function Services() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   return (
@@ -146,7 +91,7 @@ export default function Services() {
         Professional IT Services & Technology Solutions
       </motion.h1>
       <div className="services-list">
-        {services.map((service, idx) => (
+        {allServices.map((service, idx) => (
           <motion.div
             className={`services-detail-card${openIdx === idx ? ' open' : ''}`}
             key={service.title}
@@ -158,13 +103,15 @@ export default function Services() {
               cursor: 'pointer',
               marginBottom: '1.5rem',
               padding: '2rem',
+              paddingBottom: '5.5rem',
               border: '1px solid #e8ecf0',
               borderRadius: '20px',
               background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
               boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              minHeight: '200px'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-6px)';
@@ -176,51 +123,29 @@ export default function Services() {
             }}
           >
             <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              marginBottom: '1.5rem',
-              gap: '1rem'
+              marginBottom: '1.5rem'
             }}>
-              <div 
-                className="service-icon-lg" 
-                style={{
-                  fontSize: 48,
-                  width: '80px',
-                  height: '80px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  borderRadius: '20px',
-                  boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
-                  color: 'white'
-                }}
-              >
-                {service.icon}
-              </div>
-              <div style={{ flex: 1 }}>
-                <h2 style={{
-                  margin: '0 0 0.5rem 0',
-                  fontSize: '1.5rem',
-                  fontWeight: '700',
-                  color: '#1e293b',
-                  background: 'linear-gradient(135deg, #1e293b 0%, #475569 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>
-                  {service.title}
-                </h2>
-                <p style={{
-                  margin: 0,
-                  color: '#64748b',
-                  fontSize: '1rem',
-                  lineHeight: '1.6',
-                  fontWeight: '500'
-                }}>
-                  {service.desc}
-                </p>
-              </div>
+              <h2 style={{
+                margin: '0 0 0.5rem 0',
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#1e293b',
+                background: 'linear-gradient(135deg, #1e293b 0%, #475569 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                {service.title}
+              </h2>
+              <p style={{
+                margin: 0,
+                color: '#64748b',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                fontWeight: '500'
+              }}>
+                {service.desc}
+              </p>
             </div>
             <AnimatePresence>
               {openIdx === idx && (
@@ -289,10 +214,109 @@ export default function Services() {
                         ))}
                       </ul>
                     </div>
+                    {service.hasDetailPage && 'id' in service && (
+                      <div style={{ marginTop: '1.5rem' }}>
+                        <Link
+                          to={`/service/${service.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            display: 'inline-block',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
+                            padding: '0.875rem 2rem',
+                            borderRadius: '12px',
+                            fontSize: '1rem',
+                            fontWeight: '600',
+                            textDecoration: 'none',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                          }}
+                        >
+                          Learn More →
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+            {service.hasDetailPage && 'id' in service ? (
+              <Link
+                to={`/service/${service.id}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenIdx(null);
+                }}
+                style={{
+                  position: 'absolute',
+                  bottom: '2rem',
+                  right: '2rem',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '10px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                  display: openIdx === idx ? 'none' : 'block',
+                  zIndex: 10
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                }}
+              >
+                View Details →
+              </Link>
+            ) : (
+              <Link
+                to="/contact"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenIdx(null);
+                }}
+                style={{
+                  position: 'absolute',
+                  bottom: '2rem',
+                  right: '2rem',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '10px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                  display: openIdx === idx ? 'none' : 'block',
+                  zIndex: 10
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                }}
+              >
+                View Details →
+              </Link>
+            )}
           </motion.div>
         ))}
       </div>

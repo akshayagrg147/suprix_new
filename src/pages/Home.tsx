@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { courses } from '../data/courses';
+import { Link } from 'react-router-dom';
+import { caseStudies as caseStudiesData } from '../data/caseStudies';
 
 const serviceImgs = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=96&q=80', // AI/ML
@@ -49,6 +49,18 @@ const processSteps = [
   { icon: '🤝', title: 'Managed IT Support', desc: 'We provide ongoing IT support, maintenance, and continuous optimization.' },
 ];
 
+// Service ID mapping for capabilities
+const serviceIdMap: Record<string, string> = {
+  'AI & Machine Learning': 'ai-machine-learning',
+  'Cloud Computing': 'cloud-computing',
+  'DevOps & Automation': 'devops-automation',
+  'Web Development': 'web-development',
+  'Mobile App Development': 'mobile-app-development',
+  'Data Management': 'data-management',
+  'Cybersecurity': 'cybersecurity',
+  'Business Intelligence': 'business-intelligence',
+};
+
 const capabilities = [
   { icon: capabilityImgs[0], title: 'AI & Machine Learning', desc: 'Custom AI solutions, predictive analytics, and intelligent automation for business growth.' },
   { icon: capabilityImgs[1], title: 'Cloud Computing', desc: 'AWS, Azure, Google Cloud migration, management, and optimization services.' },
@@ -79,14 +91,13 @@ const services = [
   { title: 'ERP System Development', desc: 'Comprehensive ERP solutions to integrate and streamline all your business processes.', img: serviceImgs[0] },
 ];
 
-const caseStudies = [
-  { title: 'Healthcare IT Solutions & Digital Transformation', desc: 'Developed comprehensive healthcare management platform with patient data analytics and telemedicine capabilities for improved patient care.', img: portfolioImgs[0], link: '#' },
-  { title: 'Educational Technology Mobile App Development', desc: 'Created advanced iOS and Android applications with interactive learning features and seamless user experience.', img: portfolioImgs[1], link: '#' },
-  { title: 'Insurance Technology & Digital Platform Solutions', desc: 'Built digital insurance platform with automated claims processing and comprehensive customer portal functionality.', img: portfolioImgs[2], link: '#' },
-  { title: 'Enterprise Dashboard & Business Intelligence Development', desc: 'Developed custom business intelligence dashboards to streamline operations and improve organizational efficiency.', img: portfolioImgs[3], link: '#' },
-  { title: 'AI-Powered Retail Analytics & Machine Learning Solutions', desc: 'Implemented machine learning solutions for retail industry, resulting in significant sales increase through predictive analytics.', img: portfolioImgs[0], link: '#' },
-  { title: 'Cloud Migration & Financial Technology Solutions', desc: 'Successfully migrated financial technology platform to AWS cloud infrastructure, improving performance and scalability.', img: portfolioImgs[1], link: '#' },
-];
+// Use case studies from data file
+const caseStudies = caseStudiesData.map(cs => ({
+  title: cs.title,
+  desc: cs.shortDesc,
+  img: cs.img,
+  id: cs.id
+}));
 
 const team = [
   { name: 'Vishal Bansal', role: 'Chief Executive Officer & Director of IT Strategy', img: '/1.png' },
@@ -178,29 +189,26 @@ function AnimatedCounter({ value, suffix = '' }: { value: number | string, suffi
 }
 
 export default function Home() {
-  const navigate = useNavigate();
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentCapability, setCurrentCapability] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
-  // All courses closed by default
-  const [openEnrollmentCourseIds, setOpenEnrollmentCourseIds] = useState<Set<string>>(
-    new Set()
-  );
 
-  const handlePlayVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => {
-        videoRef.current?.play();
-      }, 500);
-    }
-  };
 
   // Auto-slide effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % services.length);
     }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-rotate capabilities
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCapability((prev) => (prev + 1) % capabilities.length);
+    }, 4000); // Change capability every 4 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -424,7 +432,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
       
       {/* Feature Cards Section */}
       <section style={{background: '#fff', padding: '2rem 1rem', maxWidth: '1400px', margin: '0 auto'}}>
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'stretch'}}>
           {/* Video Card */}
           <motion.div 
             style={{
@@ -434,61 +442,42 @@ We help companies reduce costs, streamline operations, and scale faster with sec
               color: 'white',
               position: 'relative',
               overflow: 'hidden',
-              minHeight: '350px',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'flex-end',
-              backgroundImage: 'url("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              cursor: 'pointer'
+              justifyContent: 'space-between'
             }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            onClick={handlePlayVideo}
           >
-            <div style={{
-              position: 'absolute',
-              top: '0',
-              left: '0',
-              right: '0',
-              bottom: '0',
-              background: 'linear-gradient(135deg, rgba(74, 85, 104, 0.8) 0%, rgba(45, 55, 72, 0.9) 100%)'
-            }}></div>
-            <div style={{
-              position: 'absolute',
-              top: '1.5rem',
-              left: '1.5rem',
-              width: '70px',
-              height: '70px',
-              backgroundColor: 'rgba(255,255,255,0.9)',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-              transition: 'all 0.3s ease',
-              transform: 'scale(1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.1)';
-              e.currentTarget.style.backgroundColor = '#f58220';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(245, 130, 32, 0.4)';
-              e.currentTarget.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-              e.currentTarget.style.color = 'black';
-            }}>
-              ▶
+            <div style={{position: 'relative', zIndex: 2, flexShrink: 0}}>
+              <h3 style={{fontSize: '1.6rem', fontWeight: '700', marginBottom: '1rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>How Does It Work?</h3>
             </div>
-            <div style={{position: 'relative', zIndex: 2}}>
-              <h3 style={{fontSize: '1.6rem', fontWeight: '700', marginBottom: '0.8rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'}}>How Does It Work?</h3>
+            <div style={{position: 'relative', zIndex: 2, width: '100%', flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0, overflow: 'hidden'}}>
+              <video 
+                ref={videoRef}
+                controls 
+                style={{
+                  borderRadius: '12px', 
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.2)', 
+                  cursor: 'pointer', 
+                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%',
+                  display: 'block'
+                }}
+                onClick={(e) => {
+                  const video = e.currentTarget;
+                  if (video.paused) {
+                    video.play();
+                  } else {
+                    video.pause();
+                  }
+                }}
+              >
+                <source src="/suprx.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </motion.div>
 
@@ -499,7 +488,6 @@ We help companies reduce costs, streamline operations, and scale faster with sec
               borderRadius: '20px',
               padding: '2.5rem',
               color: 'white',
-              minHeight: '350px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -530,7 +518,6 @@ We help companies reduce costs, streamline operations, and scale faster with sec
               color: 'white',
               position: 'relative',
               overflow: 'hidden',
-              minHeight: '350px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
@@ -652,340 +639,18 @@ We help companies reduce costs, streamline operations, and scale faster with sec
         </div>
       </section>
 
-      {/* Course Enrollment Section */}
-      <section style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '4rem 1rem', color: 'white'}}>
-        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
-          <motion.h2 
-            initial={{ opacity: 0, y: 30 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.7 }}
-            style={{
-              fontSize: '2.5rem',
-              fontWeight: '700',
-              textAlign: 'center',
-              marginBottom: '1rem',
-              color: 'white'
-            }}
-          >
-            Enroll in Our Professional Courses
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            transition={{ duration: 0.7, delay: 0.2 }}
-            style={{
-              textAlign: 'center',
-              fontSize: '1.2rem',
-              marginBottom: '3rem',
-              opacity: 0.95
-            }}
-          >
-            Choose from our comprehensive range of IT courses and kickstart your career
-          </motion.p>
-          
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem',
-            marginTop: '2rem'
-          }}>
-            {courses.map((course, idx) => {
-              const isOpen = openEnrollmentCourseIds.has(course.id);
-              return (
-              <motion.div
-                key={course.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                style={{
-                  background: 'white',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  color: '#1e293b',
-                  boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    border: isOpen ? '3px solid #f58220' : 'none',
-                    cursor: course.id === 'web-development' ? 'pointer' : 'default',
-                    position: 'relative',
-                    overflow: 'visible'
-                }}
-                onClick={() => {
-                  // Only navigate for Full Stack Web Development Internship
-                  if (course.id === 'web-development') {
-                  navigate(`/course/${course.id}`);
-                  }
-                }}
-              >
-                {course.id === 'web-development' && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '-10px',
-                    right: '-10px',
-                    transform: 'rotate(15deg)',
-                    background: 'linear-gradient(135deg, #f58220 0%, #e6731a 100%)',
-                    color: 'white',
-                    padding: '0.5rem 1.2rem',
-                    borderRadius: '8px',
-                    fontSize: '0.75rem',
-                    fontWeight: '700',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 4px 12px rgba(245, 130, 32, 0.5)',
-                    zIndex: 10,
-                    transformOrigin: 'center'
-                  }}>
-                    ACTIVE
-                  </span>
-                )}
-                <div>
-                  <div style={{
-                    fontSize: '3.5rem',
-                    marginBottom: '1rem',
-                    textAlign: 'center'
-                  }}>
-                    {course.icon}
-                  </div>
-                  <h3 style={{
-                    fontSize: '1.5rem',
-                    fontWeight: '700',
-                    marginBottom: '0.75rem',
-                    color: '#1e293b',
-                    textAlign: 'center',
-                    position: 'relative'
-                  }}>
-                    {course.title}
-                  </h3>
-                  <p style={{
-                    fontSize: '0.9rem',
-                    color: '#64748b',
-                    marginBottom: '1rem',
-                    textAlign: 'center',
-                    lineHeight: '1.5'
-                  }}>
-                    {course.description}
-                  </p>
-                  {course.id === 'web-development' && (
-                    <div style={{
-                      background: 'linear-gradient(135deg, #f58220 0%, #e6731a 100%)',
-                      color: 'white',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '10px',
-                      marginBottom: '1rem',
-                      textAlign: 'center',
-                      fontSize: '0.9rem',
-                      fontWeight: '700',
-                      boxShadow: '0 4px 12px rgba(245, 130, 32, 0.3)'
-                    }}>
-                      ⏰ Enroll before 15 Feb
-                    </div>
-                  )}
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    marginBottom: '1.5rem',
-                    fontSize: '0.9rem',
-                    color: '#475569'
-                  }}>
-                    <span>⏱️</span>
-                    <span>{course.duration}</span>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '0.5rem',
-                    marginBottom: '1.5rem',
-                    justifyContent: 'center'
-                  }}>
-                    {course.features.slice(0, 3).map((feature, i) => (
-                      <span key={i} style={{
-                        background: '#f1f5f9',
-                        padding: '0.4rem 0.8rem',
-                        borderRadius: '12px',
-                        fontSize: '0.75rem',
-                        color: '#475569',
-                        fontWeight: '500'
-                      }}>
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                  
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        style={{ overflow: 'hidden', marginBottom: '1rem' }}
-                      >
-                        <div style={{
-                          background: '#f8fafc',
-                          padding: '1.5rem',
-                          borderRadius: '12px',
-                          border: '2px solid #e2e8f0',
-                          width: '100%',
-                          boxSizing: 'border-box'
-                        }}>
-                          <h4 style={{
-                            fontSize: '1.1rem',
-                            fontWeight: '700',
-                            color: '#1e293b',
-                            marginBottom: '1rem',
-                            textAlign: 'center'
-                          }}>
-                            Choose Your Plan
-                          </h4>
-                          <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                            gap: '0.75rem',
-                            marginBottom: '1rem',
-                            width: '100%',
-                            boxSizing: 'border-box'
-                          }}>
-                            <div
-                              style={{
-                                background: 'white',
-                                border: '2px solid #e2e8f0',
-                                borderRadius: '8px',
-                                padding: '0.75rem 0.5rem',
-                                fontSize: '0.85rem',
-                                fontWeight: '600',
-                                color: '#1e293b',
-                                width: '100%',
-                                minWidth: 0,
-                                boxSizing: 'border-box',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                              }}
-                            >
-                              <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem', whiteSpace: 'nowrap' }}>Basic</div>
-                              <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#667eea', whiteSpace: 'nowrap' }}>₹{course.price.basic}</div>
-                            </div>
-                            <div
-                              style={{
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                border: '2px solid #667eea',
-                                borderRadius: '8px',
-                                padding: '0.75rem 0.5rem',
-                                fontSize: '0.85rem',
-                                fontWeight: '600',
-                                color: 'white',
-                                position: 'relative',
-                                width: '100%',
-                                minWidth: 0,
-                                boxSizing: 'border-box',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                              }}
-                            >
-                              <div style={{ fontSize: '0.7rem', marginBottom: '0.25rem', opacity: 0.9, whiteSpace: 'nowrap' }}>Popular</div>
-                              <div style={{ fontSize: '0.75rem', marginBottom: '0.25rem', opacity: 0.9, whiteSpace: 'nowrap' }}>Standard</div>
-                              <div style={{ fontSize: '1.1rem', fontWeight: '700', whiteSpace: 'nowrap' }}>₹{course.price.standard}</div>
-                            </div>
-                            <div
-                              style={{
-                                background: 'white',
-                                border: '2px solid #f58220',
-                                borderRadius: '8px',
-                                padding: '0.75rem 0.5rem',
-                                fontSize: '0.85rem',
-                                fontWeight: '600',
-                                color: '#1e293b',
-                                width: '100%',
-                                minWidth: 0,
-                                boxSizing: 'border-box',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                              }}
-                            >
-                              <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem', whiteSpace: 'nowrap' }}>Premium</div>
-                              <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#f58220', whiteSpace: 'nowrap' }}>₹{course.price.premium}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {course.id !== 'web-development' && (
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Toggle enrollment form for inactive courses
-                        const newSet = new Set(openEnrollmentCourseIds);
-                        if (isOpen) {
-                          newSet.delete(course.id);
-                        } else {
-                          newSet.add(course.id);
-                        }
-                        setOpenEnrollmentCourseIds(newSet);
-                      }}
-                      style={{
-                        backgroundColor: '#94a3b8',
-                        color: 'white',
-                        border: 'none',
-                        padding: '1rem 2rem',
-                        borderRadius: '12px',
-                        fontSize: '1rem',
-                        fontWeight: '700',
-                        cursor: 'not-allowed',
-                        width: '100%',
-                        transition: 'all 0.2s ease',
-                        boxShadow: '0 4px 15px rgba(148, 163, 184, 0.3)',
-                        opacity: 0.8
-                      }}
-                      disabled
-                    >
-                      Enrollment Closed
-                    </button>
-                  )}
-              </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-      
       {/* SEO Content Section */}
       <section className="seo-content-section" style={{background: '#f8f9fa', padding: '3rem 1rem', textAlign: 'center'}}>
         <div style={{maxWidth: 1000, margin: '0 auto'}}>
           <h2 style={{color: '#222', marginBottom: '1.5rem', fontSize: '2rem'}}>Why Choose Suprix Solution for Your IT Needs?</h2>
           <p style={{color: '#555', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2rem'}}>
-            As a leading <strong>IT consulting company in India</strong>, Suprix Solution specializes in delivering 
-            <strong> custom software development</strong>, <strong>cloud migration services</strong>, 
-            <strong> AI and machine learning solutions</strong>, and <strong>digital transformation consulting</strong>. 
+            As a leading IT consulting company in India, Suprix Solution specializes in delivering 
+            custom software development, cloud migration services, 
+            AI and machine learning solutions, and digital transformation consulting. 
             Our expert team of developers, cloud architects, and IT consultants helps businesses across 
-            <strong> healthcare, fintech, e-commerce, education, and manufacturing sectors</strong> achieve 
+            healthcare, fintech, e-commerce, education, and manufacturing sectors achieve 
             their digital goals with cutting-edge technology solutions.
           </p>
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginTop: '2rem'}}>
-            <div style={{background: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
-              <h3 style={{color: '#f58220', marginBottom: '1rem'}}>Expert Development Team</h3>
-              <p style={{color: '#666'}}>Certified developers with expertise in React, Node.js, Python, AWS, and Azure technologies.</p>
-            </div>
-            <div style={{background: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
-              <h3 style={{color: '#f58220', marginBottom: '1rem'}}>Proven Track Record</h3>
-              <p style={{color: '#666'}}>Successfully delivered 50+ IT projects with 99% client satisfaction rate.</p>
-            </div>
-            <div style={{background: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
-              <h3 style={{color: '#f58220', marginBottom: '1rem'}}>24/7 Support</h3>
-              <p style={{color: '#666'}}>Round-the-clock technical support and maintenance for all our solutions.</p>
-            </div>
-          </div>
         </div>
       </section>
       {/* Stats Section */}
@@ -1031,25 +696,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           ))}
         </div>
       </section>
-      {/* Capabilities Section */}
-      <section className="capabilities-section" style={{background: '#f5f5f5'}}>
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Our Comprehensive IT Service Capabilities | Technology Solutions</motion.h2>
-        <div className="capabilities-grid">
-          {capabilities.map((cap, idx) => (
-            <motion.div
-              className="capability-card"
-              key={cap.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-            >
-              <img src={cap.icon} alt={cap.title + ' icon'} style={{width: 64, height: 64, marginBottom: 16}} />
-              <h3>{cap.title}</h3>
-              <p>{cap.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+   
     
       {/* Services Section */}
       <section id="services" className="services-section">
@@ -1058,6 +705,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           <div 
             className="services-slideshow"
             style={{
+              width: `${services.length * 100}%`,
               transform: `translateX(-${currentSlide * (100 / services.length)}%)`,
               transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
@@ -1066,9 +714,13 @@ We help companies reduce costs, streamline operations, and scale faster with sec
               <motion.div
                 className="service-slide"
                 key={service.title}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 1.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
+                style={{
+                  width: `calc(100% / ${services.length})`,
+                  minWidth: `calc(100% / ${services.length})`
+                }}
               >
                 <div className="service-slide-content">
                   <div className="service-icon-container">
@@ -1088,30 +740,6 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           </div>
         </div>
       </section>
-      {/* Video/Demo Section */}
-      <section className="video-demo-section" style={{background: '#f5f5f5', textAlign: 'center', padding: '4rem 1rem'}}>
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>How Does It Work?</motion.h2>
-        <div style={{margin: '2rem auto', maxWidth: 600}}>
-          <video 
-            ref={videoRef}
-            width="100%" 
-            height="340" 
-            controls 
-            style={{borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', cursor: 'pointer'}}
-            onClick={(e) => {
-              const video = e.currentTarget;
-              if (video.paused) {
-                video.play();
-              } else {
-                video.pause();
-              }
-            }}
-          >
-            <source src="/suprx.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </section>
       {/* Portfolio/Case Studies Section */}
       <section id="portfolio" className="portfolio-section">
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>IT Project Portfolio & Success Stories</motion.h2>
@@ -1119,33 +747,32 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           {caseStudies.map((cs, idx) => (
             <motion.div
               className="portfolio-card"
-              key={cs.title}
+              key={cs.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              style={{ cursor: 'pointer' }}
             >
-              <img src={cs.img} alt={cs.title + ' project'} style={{width: '100%', maxWidth: 220, borderRadius: 12, marginBottom: 16, boxShadow: 'var(--shadow)'}} />
-              <h3>{cs.title}</h3>
-              <p>{cs.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-      {/* Team Section */}
-      <section id="team" className="team-section">
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Meet Our IT Leadership Team</motion.h2>
-        <div className="team-grid">
-          {team.map((member, idx) => (
-            <motion.div
-              className="team-card"
-              key={member.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-            >
-              <img src={member.img} alt={member.name + ' photo'} style={{width: 72, height: 72, borderRadius: '50%', marginBottom: 12, objectFit: 'cover', boxShadow: 'var(--shadow)'}} />
-              <h3>{member.name}</h3>
-              <span className="team-role">{member.role}</span>
+              <Link 
+                to={`/case-study/${cs.id}`}
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+              >
+                <img src={cs.img} alt={cs.title + ' project'} style={{width: '100%', maxWidth: 220, borderRadius: 12, marginBottom: 16, boxShadow: 'var(--shadow)'}} />
+                <h3>{cs.title}</h3>
+                <p>{cs.desc}</p>
+                <div style={{
+                  marginTop: '1rem',
+                  color: '#f58220',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  Read Case Study →
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -1184,26 +811,6 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           ))}
         </div>
       </section>
-      {/* Blog/Insights Preview Section */}
-      <section className="blog-section" style={{background: '#f5f5f5'}}>
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Latest IT Industry Insights & Technology Blog</motion.h2>
-        <div className="blog-grid">
-          {blogPosts.map((blog, idx) => (
-            <motion.div
-              className="blog-card"
-              key={blog.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-            >
-              <img src={blog.img} alt={blog.title + ' image'} style={{width: '100%', maxWidth: 220, borderRadius: 12, marginBottom: 16, boxShadow: 'var(--shadow)'}} />
-              <h3>{blog.title}</h3>
-              <span className="blog-date">{blog.date}</span>
-              <p>{blog.summary}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
       {/* FAQ Section */}
       <section className="faq-section">
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>IT Services FAQ - Frequently Asked Questions</motion.h2>
@@ -1222,24 +829,6 @@ We help companies reduce costs, streamline operations, and scale faster with sec
             </motion.div>
           ))}
         </div>
-      </section>
-      {/* Sticky CTA Banner */}
-      <section className="cta-banner-section">
-        <motion.div className="cta-banner" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }}>
-          <h2>Ready to Transform Your Business with Expert IT Services?</h2>
-          <a href="/contact" className="cta-btn">Get a Free Consultation</a>
-        </motion.div>
-      </section>
-      {/* Contact Section with Form */}
-      <section id="contact" className="contact-section" style={{background: '#fff', color: '#222'}}>
-        <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Contact Our IT Consulting Team</motion.h2>
-        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1 }}>
-          Need help with a project or have a question? We’re here. <br />
-          <a href="mailto:hello@suprixsolution.in" className="contact-link">hello@suprixsolution.in</a>
-        </motion.p>
-        <motion.a href="tel:+919485563525" className="cta-btn" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}>
-          Call Us: +91 94855-63525
-        </motion.a>
       </section>
     </main>
   );
