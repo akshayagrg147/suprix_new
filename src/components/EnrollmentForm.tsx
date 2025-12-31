@@ -221,7 +221,7 @@ Please send the payment link to the student.`
       // Initialize Razorpay payment
       const options: RazorpayOptions = {
         key: razorpayKey,
-        amount: 1 * 100, // Amount in paise
+        amount: planPrice * 100, // Amount in paise
         currency: 'INR',
         name: 'Suprix Solution',
         description: `${course.title} - ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} Plan`,

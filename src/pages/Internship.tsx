@@ -6,7 +6,7 @@ import EnrollmentModal from '../components/EnrollmentModal';
 
 export default function Internship() {
   const navigate = useNavigate();
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedCourse, _setSelectedCourse] = useState<Course | null>(null);
   const [isEnrollmentModalOpen, setIsEnrollmentModalOpen] = useState(false);
   // All courses closed by default
   const [openEnrollmentCourseIds, setOpenEnrollmentCourseIds] = useState<Set<string>>(

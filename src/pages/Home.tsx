@@ -21,7 +21,8 @@ const capabilityImgs = [
   'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=96&q=80', // Security
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=96&q=80', // Analytics
 ];
-const portfolioImgs = [
+// @ts-expect-error - Reserved for future use
+const _portfolioImgs = [
   'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80',
   'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
   'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
@@ -50,7 +51,8 @@ const processSteps = [
 ];
 
 // Service ID mapping for capabilities
-const serviceIdMap: Record<string, string> = {
+// @ts-expect-error - Reserved for future use
+const _serviceIdMap: Record<string, string> = {
   'AI & Machine Learning': 'ai-machine-learning',
   'Cloud Computing': 'cloud-computing',
   'DevOps & Automation': 'devops-automation',
@@ -99,7 +101,8 @@ const caseStudies = caseStudiesData.map(cs => ({
   id: cs.id
 }));
 
-const team = [
+// @ts-expect-error - Reserved for future use
+const _team = [
   { name: 'Vishal Bansal', role: 'Chief Executive Officer & Director of IT Strategy', img: '/1.png' },
   // { name: 'Vishal Bansal', role: 'Chief Technology Officer', img: teamImgs[1] },
   { name: 'Poonam Garg', role: 'Business Development Executive', img: '/2.png' },
@@ -122,7 +125,8 @@ const awards = [
   'Best IT Services Provider 2024',
 ];
 
-const blogPosts = [
+// @ts-expect-error - Reserved for future use
+const _blogPosts = [
   { title: 'AI & Machine Learning in Business: A Complete Guide', date: 'July 2024', img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80', summary: 'Discover how artificial intelligence and machine learning are revolutionizing business operations and driving digital transformation.' },
   { title: 'Cloud Migration Strategies for Enterprise IT', date: 'June 2024', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', summary: 'Comprehensive guide to successful cloud migration, including security, cost optimization, and performance best practices.' },
   { title: 'Modern Web Development Trends 2024', date: 'May 2024', img: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80', summary: 'Explore the latest web development technologies, frameworks, and design trends shaping the future of digital experiences.' },
@@ -191,7 +195,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number | string, suffi
 export default function Home() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentCapability, setCurrentCapability] = useState(0);
+  const [_currentCapability, setCurrentCapability] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
 
@@ -231,7 +235,7 @@ export default function Home() {
       "addressCountry": "IN"
     },
     "sameAs": [
-      "https://www.linkedin.com/company/suprix-solution",
+      "https://www.linkedin.com/company/suprixsolution/posts/?feedView=all",
       "https://twitter.com/suprixsolution"
     ],
     "service": [

@@ -296,11 +296,11 @@ export default function CaseStudyDetail() {
                     overflow: 'hidden',
                     boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
                     cursor: 'pointer',
-                    transition: 'transform 0.3s ease'
+                    transition: 'transform 0.3s ease',
+                    position: 'relative'
                   }}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => setLightboxImage(screenshot)}
-                  style={{ position: 'relative' }}
                 >
                   <img 
                     src={screenshot} 

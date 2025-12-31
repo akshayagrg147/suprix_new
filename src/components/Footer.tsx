@@ -131,7 +131,7 @@ const Footer = () => {
               <h4 className="footer-social-heading">Follow Us</h4>
               <div className="footer-social-links">
                 <a 
-                  href="https://www.linkedin.com/company/suprix-solution" 
+                  href="https://www.linkedin.com/company/suprixsolution/posts/?feedView=all" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="footer-social-link"
