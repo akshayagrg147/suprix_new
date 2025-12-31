@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type Course } from '../data/courses';
 import emailjs from '@emailjs/browser';
+import { addToWaitingList } from '../utils/waitingList';
 
 interface EnrollmentFormProps {
   course: Course;
@@ -29,7 +30,7 @@ const EMAILJS_ENROLLMENT_TEMPLATE_ID = 'template_wyfl6gq'; // You may want to cr
 const EMAILJS_PUBLIC_KEY = 'cEh-KwwYV9428kPa7';
 const ADMIN_EMAIL = 'akshaygarg147@gmail.com';
 
-export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymentSuccess: _onPaymentSuccess }: EnrollmentFormProps) {
+export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymentSuccess }: EnrollmentFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,7 +41,6 @@ export default function EnrollmentForm({ course, selectedPlan, onClose, onPaymen
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [emailSent, setEmailSent] = useState(false);
 
   const planPrice = course.price[selectedPlan];
 
@@ -121,13 +121,37 @@ Please send the payment link to the student.`
       );
 
       console.log('Enrollment email sent successfully');
-      setEmailSent(true);
       return true;
     } catch (error) {
       console.error('Error sending enrollment email:', error);
       // Still return true to proceed with payment even if email fails
       return true;
     }
+  };
+
+  const handlePaymentFailure = (response: RazorpayError, formData: { name: string; email: string; phone: string; address: string; qualification: string; experience: string }) => {
+    console.error('Payment failed:', response);
+    const enrollmentData: EnrollmentData = {
+      courseId: course.id,
+      courseName: course.title,
+      plan: selectedPlan,
+      amount: planPrice,
+      studentName: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      paymentId: response.metadata?.payment_id || `failed_${Date.now()}`,
+      paymentStatus: 'failed',
+      enrollmentDate: new Date().toISOString()
+    };
+    
+    // Add to waiting list with failed status
+    addToWaitingList(enrollmentData, {
+      address: formData.address,
+      qualification: formData.qualification,
+      experience: formData.experience
+    });
+    
+    alert(`Payment failed: ${response.description || 'Unknown error'}. Please try again or contact support.`);
   };
 
   const handlePayment = async (e: FormEvent) => {
@@ -139,30 +163,9 @@ Please send the payment link to the student.`
 
     setIsSubmitting(true);
 
-    // Send enrollment email first
-    try {
-      await sendEnrollmentEmail();
-      // Show success message and close after a delay
-      setTimeout(() => {
-        setIsSubmitting(false);
-        // Don't proceed with payment - just show the message
-        // The email sent state will show the message
-      }, 1000);
-      return; // Exit early - don't proceed with payment gateway
-    } catch (error) {
-      console.error('Error in enrollment process:', error);
-      setIsSubmitting(false);
-      alert('There was an error processing your enrollment. Please try again.');
-      return;
-    }
-
-    // OLD PAYMENT CODE - Commented out as we're not using payment gateway now
-    /*
-    setIsSubmitting(true);
-
     try {
       const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
-      const isDemoMode = !razorpayKey || razorpayKey === 'rzp_test_YOUR_KEY_ID';
+      const isDemoMode = !razorpayKey || razorpayKey === 'rzp_test_YOUR_KEY_ID' || razorpayKey.trim() === '' || razorpayKey === 'rzp_live_YOUR_KEY_ID';
 
       // For demo purposes, if Razorpay key is not set, simulate payment
       if (isDemoMode) {
@@ -180,7 +183,17 @@ Please send the payment link to the student.`
             paymentStatus: 'success',
             enrollmentDate: new Date().toISOString()
           };
-          addToWaitingList(enrollmentData);
+          
+          // Add to waiting list with additional info
+          addToWaitingList(enrollmentData, {
+            address: formData.address,
+            qualification: formData.qualification,
+            experience: formData.experience
+          });
+          
+          // Send enrollment email
+          sendEnrollmentEmail().catch(err => console.error('Email send error:', err));
+          
           onPaymentSuccess(enrollmentData);
           setIsSubmitting(false);
         }, 2000);
@@ -190,7 +203,7 @@ Please send the payment link to the student.`
       // Load Razorpay script if not already loaded
       const loadRazorpayScript = (): Promise<void> => {
         return new Promise((resolve, reject) => {
-          if ((window as any).Razorpay) {
+          if (window.Razorpay) {
             resolve();
             return;
           }
@@ -203,74 +216,76 @@ Please send the payment link to the student.`
         });
       };
 
-      try {
-        await loadRazorpayScript();
+      await loadRazorpayScript();
 
-        // Initialize Razorpay payment
-        const options = {
-          key: razorpayKey,
-          amount: planPrice * 100, // Amount in paise
-          currency: 'INR',
-          name: 'Suprix Solution',
-          description: `${course.title} - ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} Plan`,
-          image: '/logo.svg',
-          handler: async function (response: any) {
-            // Payment successful
-            const enrollmentData: EnrollmentData = {
-              courseId: course.id,
-              courseName: course.title,
-              plan: selectedPlan,
-              amount: planPrice,
-              studentName: formData.name,
-              email: formData.email,
-              phone: formData.phone,
-              paymentId: response.razorpay_payment_id,
-              paymentStatus: 'success',
-              enrollmentDate: new Date().toISOString()
-            };
-
-            // Add to waiting list
-            addToWaitingList(enrollmentData);
-            onPaymentSuccess(enrollmentData);
-            setIsSubmitting(false);
-          },
-          prefill: {
-            name: formData.name,
+      // Initialize Razorpay payment
+      const options: RazorpayOptions = {
+        key: razorpayKey,
+        amount: 1 * 100, // Amount in paise
+        currency: 'INR',
+        name: 'Suprix Solution',
+        description: `${course.title} - ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} Plan`,
+        image: '/logo.svg',
+        handler: async function (response: RazorpayResponse) {
+          // Payment successful
+          const enrollmentData: EnrollmentData = {
+            courseId: course.id,
+            courseName: course.title,
+            plan: selectedPlan,
+            amount: planPrice,
+            studentName: formData.name,
             email: formData.email,
-            contact: formData.phone
-          },
-          theme: {
-            color: '#667eea'
-          },
-          modal: {
-            ondismiss: function() {
-              setIsSubmitting(false);
-            }
-          }
-        };
+            phone: formData.phone,
+            paymentId: response.razorpay_payment_id,
+            paymentStatus: 'success',
+            enrollmentDate: new Date().toISOString()
+          };
 
-        const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-          // Payment failed - handle refund logic here
-          handlePaymentFailure(response, formData);
+          // Add to waiting list with additional info
+          addToWaitingList(enrollmentData, {
+            address: formData.address,
+            qualification: formData.qualification,
+            experience: formData.experience
+          });
+
+          // Send enrollment email
+          try {
+            await sendEnrollmentEmail();
+          } catch (emailError) {
+            console.error('Error sending enrollment email:', emailError);
+            // Continue even if email fails
+          }
+
+          onPaymentSuccess(enrollmentData);
           setIsSubmitting(false);
-        });
-        rzp.open();
-      } catch (error) {
-        console.error('Razorpay initialization error:', error);
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: {
+          color: '#667eea'
+        },
+        modal: {
+          ondismiss: function() {
+            setIsSubmitting(false);
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response: RazorpayError) {
+        handlePaymentFailure(response, formData);
         setIsSubmitting(false);
-        alert('Payment gateway error. Please try again or contact support.');
-      }
+      });
+      rzp.open();
     } catch (error) {
       console.error('Payment error:', error);
       setIsSubmitting(false);
-      alert('Payment failed. Please try again.');
+      alert('Payment gateway error. Please try again or contact support.');
     }
-    */
   };
-
-  // Payment-related functions removed as payment gateway is disabled
-  // These can be restored if payment functionality is re-enabled
 
   return (
     <AnimatePresence>
@@ -509,124 +524,65 @@ Please send the payment link to the student.`
               />
             </div>
 
-            {/* Success Message */}
-            {emailSent && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                style={{
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                  padding: '1.5rem',
-                  borderRadius: '12px',
-                  marginBottom: '1.5rem',
-                  color: 'white',
-                  textAlign: 'center'
-                }}
-              >
-                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✅</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-                  Enrollment Request Submitted!
-                </div>
-                <div style={{ fontSize: '0.95rem', opacity: 0.95 }}>
-                  We will send the payment link soon to your email
-                </div>
-              </motion.div>
-            )}
-
             {/* Payment Info */}
-            {!emailSent && (
-              <div style={{
-                background: '#f8fafc',
-                padding: '1rem',
-                borderRadius: '12px',
-                marginBottom: '1.5rem',
-                fontSize: '0.875rem',
-                color: '#64748b'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <span>🔒</span>
-                  <span>Secure enrollment process</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>✅</span>
-                  <span>Payment link will be sent via email</span>
-                </div>
+            <div style={{
+              background: '#f8fafc',
+              padding: '1rem',
+              borderRadius: '12px',
+              marginBottom: '1.5rem',
+              fontSize: '0.875rem',
+              color: '#64748b'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <span>🔒</span>
+                <span>Secure payment through Razorpay</span>
               </div>
-            )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>✅</span>
+                <span>Multiple payment options available</span>
+              </div>
+            </div>
 
             {/* Submit Button */}
-            {!emailSent && (
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                style={{
-                  width: '100%',
-                  backgroundColor: isSubmitting ? '#94a3b8' : '#667eea',
-                  color: 'white',
-                  border: 'none',
-                  padding: '1rem 2rem',
-                  borderRadius: '12px',
-                  fontSize: '1rem',
-                  fontWeight: '700',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  if (!isSubmitting) {
-                    e.currentTarget.style.backgroundColor = '#5568d3';
-                    e.currentTarget.style.transform = 'scale(1.02)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isSubmitting) {
-                    e.currentTarget.style.backgroundColor = '#667eea';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }
-                }}
-              >
-                {isSubmitting ? 'Processing...' : `Pay ₹${planPrice} & Enroll`}
-              </button>
-            )}
-
-            {emailSent && (
-              <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  width: '100%',
-                  backgroundColor: '#667eea',
-                  color: 'white',
-                  border: 'none',
-                  padding: '1rem 2rem',
-                  borderRadius: '12px',
-                  fontSize: '1rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: '100%',
+                backgroundColor: isSubmitting ? '#94a3b8' : '#667eea',
+                color: 'white',
+                border: 'none',
+                padding: '1rem 2rem',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: '700',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmitting) {
                   e.currentTarget.style.backgroundColor = '#5568d3';
                   e.currentTarget.style.transform = 'scale(1.02)';
-                }}
-                onMouseLeave={(e) => {
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmitting) {
                   e.currentTarget.style.backgroundColor = '#667eea';
                   e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                Close
-              </button>
-            )}
+                }
+              }}
+            >
+              {isSubmitting ? 'Processing...' : `Pay ₹${planPrice} & Enroll`}
+            </button>
 
-            {!emailSent && (
-              <p style={{
-                fontSize: '0.875rem',
-                color: '#64748b',
-                textAlign: 'center',
-                marginTop: '1rem'
-              }}>
-                By enrolling, you agree to be added to our waiting list. You'll be notified when the course starts.
-              </p>
-            )}
+            <p style={{
+              fontSize: '0.875rem',
+              color: '#64748b',
+              textAlign: 'center',
+              marginTop: '1rem'
+            }}>
+              By enrolling, you agree to be added to our waiting list. You'll be notified when the course starts.
+            </p>
           </form>
         </motion.div>
       </motion.div>

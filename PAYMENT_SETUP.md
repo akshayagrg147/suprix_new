@@ -22,11 +22,19 @@ This application includes a complete enrollment system with payment integration 
 3. Create a `.env` file in the root directory:
 
 ```env
-VITE_RAZORPAY_KEY_ID=rzp_test_YOUR_KEY_ID_HERE
+VITE_RAZORPAY_KEY_ID=rzp_live_RxW3r6nUOhOoDj
 ```
 
-4. Replace `rzp_test_YOUR_KEY_ID_HERE` with your actual Razorpay Key ID
-5. For production, use live keys instead of test keys
+**⚠️ IMPORTANT SECURITY NOTES:**
+- ✅ **Key ID** (starts with `rzp_live_` or `rzp_test_`) - Safe to use in frontend
+- ❌ **Key Secret** - MUST ONLY be used on backend/server-side, NEVER in frontend code
+- The `.env` file is already in `.gitignore` to prevent accidental commits
+- For production, always use live keys (`rzp_live_*`)
+- For testing, use test keys (`rzp_test_*`)
+
+**Current Configuration:**
+- Live Key ID: `rzp_live_RxW3r6nUOhOoDj` (configured in `.env`)
+- Key Secret: `a4MRTHamXJUL0SQIvdAfh4Mc` (for backend use only)
 
 ### 2. Demo Mode
 

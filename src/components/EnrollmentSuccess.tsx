@@ -115,7 +115,7 @@ export default function EnrollmentSuccess({ enrollmentData, onClose }: Enrollmen
             <div>
               <div style={{ fontWeight: '600', color: '#92400e', marginBottom: '0.25rem' }}>Waiting List</div>
               <div style={{ fontSize: '0.875rem', color: '#78350f' }}>
-                You're on the waiting list! We'll notify you via email ({enrollmentData.email}) when the course starts.
+                Congratulations! Your enrollment is confirmed. We'll send you course details and start date information via email shortly.
               </div>
             </div>
           </div>
