@@ -27,3 +27,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+google-auth-project/mafatlal.json
+google-auth-project/

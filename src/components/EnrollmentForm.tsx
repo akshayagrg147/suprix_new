@@ -218,11 +218,52 @@ Please send the payment link to the student.`
 
       await loadRazorpayScript();
 
-      // Initialize Razorpay payment
+      // Create Razorpay order first (required to prevent refunds)
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      let orderId: string;
+
+      try {
+        const orderResponse = await fetch(`${API_URL}/api/create-order`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: planPrice,
+            currency: 'INR',
+            receipt: `rcpt_${Date.now()}`, // Receipt must be max 40 chars
+            notes: {
+              course_id: course.id,
+              course_name: course.title,
+              plan: selectedPlan,
+              student_name: formData.name,
+              student_email: formData.email
+            }
+          })
+        });
+
+        if (!orderResponse.ok) {
+          const errorData = await orderResponse.json();
+          throw new Error(errorData.message || 'Failed to create order');
+        }
+
+        const orderData = await orderResponse.json();
+        orderId = orderData.order.id;
+
+        console.log('Razorpay order created:', orderId);
+      } catch (orderError) {
+        console.error('Error creating Razorpay order:', orderError);
+        setIsSubmitting(false);
+        alert(`Failed to initialize payment: ${orderError instanceof Error ? orderError.message : 'Please check if the server is running'}. Please try again or contact support.`);
+        return;
+      }
+
+      // Initialize Razorpay payment with order_id
       const options: RazorpayOptions = {
         key: razorpayKey,
-        amount: planPrice * 100, // Amount in paise
+        amount: planPrice * 100, // Amount in paise (kept for backward compatibility)
         currency: 'INR',
+        order_id: orderId, // Required: This prevents automatic refunds
         name: 'Suprix Solution',
         description: `${course.title} - ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} Plan`,
         image: '/logo.svg',
@@ -240,6 +281,14 @@ Please send the payment link to the student.`
             paymentStatus: 'success',
             enrollmentDate: new Date().toISOString()
           };
+
+          // Verify order_id matches
+          if (response.razorpay_order_id !== orderId) {
+            console.warn('Order ID mismatch:', {
+              expected: orderId,
+              received: response.razorpay_order_id
+            });
+          }
 
           // Add to waiting list with additional info
           addToWaitingList(enrollmentData, {

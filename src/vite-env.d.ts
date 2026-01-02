@@ -2,8 +2,9 @@
 
 interface RazorpayOptions {
   key: string;
-  amount: number;
-  currency: string;
+  amount?: number;
+  currency?: string;
+  order_id?: string;
   name: string;
   description: string;
   image?: string;
