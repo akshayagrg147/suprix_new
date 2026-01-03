@@ -1878,3 +1878,82 @@ TVGGVVC6776YYU77YG  .service-slide-features {
     height: 48px;
   }
 }
+
+/* Syllabus Section Responsive Styles */
+@media (max-width: 968px) {
+  .syllabus-container {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+  }
+  
+  .syllabus-sidebar {
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 1rem 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 0 !important;
+  }
+  
+  .syllabus-sidebar > div {
+    min-width: 120px !important;
+    padding: 0.75rem 1rem !important;
+    border-left: none !important;
+  }
+  
+  .syllabus-week-item.active {
+    border-left: none !important;
+    border-bottom: 3px solid #f58220 !important;
+  }
+  
+  .syllabus-header {
+    flex-direction: column !important;
+    padding: 2rem 1.5rem !important;
+    text-align: center !important;
+  }
+  
+  .syllabus-header h3 {
+    font-size: 2rem !important;
+  }
+  
+  .syllabus-icon {
+    width: 150px !important;
+    height: 150px !important;
+    font-size: 3rem !important;
+    margin-top: 1rem !important;
+  }
+  
+  .syllabus-content {
+    padding: 2rem 1.5rem !important;
+  }
+  
+  .syllabus-topics {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .syllabus-header {
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .syllabus-header h3 {
+    font-size: 1.5rem !important;
+  }
+  
+  .syllabus-header p {
+    font-size: 0.95rem !important;
+  }
+  
+  .syllabus-icon {
+    width: 120px !important;
+    height: 120px !important;
+    font-size: 2.5rem !important;
+  }
+  
+  .syllabus-content {
+    padding: 1.5rem 1rem !important;
+  }
+}

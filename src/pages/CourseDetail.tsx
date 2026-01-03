@@ -10,11 +10,16 @@ export default function CourseDetail() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrollmentModalOpen, setIsEnrollmentModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'basic' | 'standard' | 'premium'>('standard');
+  const [selectedWeek, setSelectedWeek] = useState<number>(1);
 
   useEffect(() => {
     const course = courses.find(c => c.id === courseId);
     if (course) {
       setSelectedCourse(course);
+      // Set initial selected week to first week
+      if (course.syllabus.length > 0) {
+        setSelectedWeek(course.syllabus[0].week);
+      }
     } else {
       // Redirect to home if course not found
       navigate('/');
@@ -259,7 +264,7 @@ export default function CourseDetail() {
         </motion.section>
       )}
 
-      {/* Detailed Syllabus */}
+      {/* Detailed Syllabus - New Design */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -276,104 +281,202 @@ export default function CourseDetail() {
         }}>
           Course Syllabus
         </h2>
-        <div style={{
-          display: 'grid',
-          gap: '1.5rem'
-        }}>
-          {selectedCourse.syllabus.map((week, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              style={{
-                background: 'white',
-                border: '2px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '2rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#667eea';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#e2e8f0';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '1.5rem',
-                gap: '1rem'
-              }}>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  color: 'white',
+        
+        <div 
+          className="syllabus-container"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '280px 1fr',
+            gap: '0',
+            background: 'white',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            minHeight: '600px'
+          }}
+        >
+          {/* Left Sidebar - Week Navigation */}
+          <div 
+            className="syllabus-sidebar"
+            style={{
+              background: '#f5f5f5',
+              padding: '2rem 0',
+              borderRight: '1px solid #e2e8f0'
+            }}
+          >
+            {selectedCourse.syllabus.map((week, idx) => (
+              <div
+                key={idx}
+                className={selectedWeek === week.week ? 'syllabus-week-item active' : 'syllabus-week-item'}
+                onClick={() => setSelectedWeek(week.week)}
+                style={{
+                  padding: '1rem 1.5rem',
+                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.5rem',
-                  fontWeight: '700',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
-                }}>
-                  {week.week}
-                </div>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  fontWeight: '700',
-                  color: '#1e293b',
-                  margin: 0
-                }}>
-                  Week {week.week}
-                </h3>
+                  justifyContent: 'space-between',
+                  color: selectedWeek === week.week ? '#f58220' : '#475569',
+                  fontWeight: selectedWeek === week.week ? '600' : '400',
+                  background: selectedWeek === week.week ? 'rgba(245, 130, 32, 0.1)' : 'transparent',
+                  borderLeft: selectedWeek === week.week ? '3px solid #f58220' : '3px solid transparent',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedWeek !== week.week) {
+                    e.currentTarget.style.background = 'rgba(245, 130, 32, 0.05)';
+                    e.currentTarget.style.color = '#f58220';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedWeek !== week.week) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#475569';
+                  }
+                }}
+              >
+                <span style={{ fontSize: '1rem' }}>Week {week.week}</span>
+                {selectedWeek === week.week && (
+                  <motion.svg
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10 12L6 8L10 4"
+                      stroke="#f58220"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </motion.svg>
+                )}
               </div>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                gap: '1rem'
-              }}>
-                {week.topics.map((topic, topicIdx) => (
-                  <div
-                    key={topicIdx}
+            ))}
+          </div>
+
+          {/* Right Content Area */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {selectedCourse.syllabus
+              .filter(week => week.week === selectedWeek)
+              .map((week, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+                >
+                  {/* Header Section with Dark Background */}
+                  <div 
+                    className="syllabus-header"
                     style={{
+                      background: '#1e293b',
+                      padding: '3rem 3rem',
+                      color: 'white',
                       display: 'flex',
                       alignItems: 'center',
-                      color: '#475569',
-                      fontSize: '1rem',
-                      padding: '1rem',
-                      background: '#f8fafc',
-                      borderRadius: '8px',
-                      border: '1px solid #e2e8f0',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#f1f5f9';
-                      e.currentTarget.style.borderColor = '#667eea';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#f8fafc';
-                      e.currentTarget.style.borderColor = '#e2e8f0';
+                      justifyContent: 'space-between',
+                      gap: '2rem'
                     }}
                   >
-                    <span style={{
-                      color: '#10b981',
-                      marginRight: '0.75rem',
-                      fontSize: '1.2rem',
-                      fontWeight: 'bold'
-                    }}>✓</span>
-                    <span>{topic}</span>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: '700',
+                        marginBottom: '1rem',
+                        color: 'white'
+                      }}>
+                        Week {week.week}
+                      </h3>
+                      <p style={{
+                        fontSize: '1.1rem',
+                        lineHeight: '1.6',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        maxWidth: '600px'
+                      }}>
+                        {selectedCourse.description}
+                      </p>
+                    </div>
+                    <div 
+                      className="syllabus-icon"
+                      style={{
+                        width: '200px',
+                        height: '200px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, rgba(245, 130, 32, 0.2) 0%, rgba(245, 130, 32, 0.1) 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '4rem',
+                        flexShrink: 0
+                      }}
+                    >
+                      {selectedCourse.icon}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+
+                  {/* Content Section with Topics */}
+                  <div 
+                    className="syllabus-content"
+                    style={{
+                      background: 'white',
+                      padding: '3rem',
+                      flex: 1
+                    }}
+                  >
+                    <h4 style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      color: '#475569',
+                      marginBottom: '2rem'
+                    }}>
+                      Topics Covered:
+                    </h4>
+                    <div 
+                      className="syllabus-topics"
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '1.5rem'
+                      }}
+                    >
+                      {week.topics.map((topic, topicIdx) => (
+                        <div
+                          key={topicIdx}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '0.75rem'
+                          }}
+                        >
+                          <div style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: '#f58220',
+                            marginTop: '0.5rem',
+                            flexShrink: 0
+                          }} />
+                          <span style={{
+                            fontSize: '1rem',
+                            color: '#1e293b',
+                            lineHeight: '1.6'
+                          }}>
+                            {topic}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+          </div>
         </div>
       </motion.section>
 
