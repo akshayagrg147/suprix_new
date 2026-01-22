@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { caseStudies as caseStudiesData } from '../data/caseStudies';
 
 const serviceImgs = [
-  'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=96&q=80', // AI/ML
-  'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=96&q=80', // Software Development
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=96&q=80', // Web Development
-  'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=96&q=80', // Cloud Computing
-  'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=96&q=80', // DevOps
-  'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=96&q=80', // IT Consulting
+  'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=fill&w=240&h=240&q=90', // AI/ML
+  'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=fill&w=240&h=240&q=90', // Software Development
+  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=fill&w=240&h=240&q=90', // Web Development
+  'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=fill&w=240&h=240&q=90', // Cloud Computing
+  'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=fill&w=240&h=240&q=90', // DevOps
+  'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=fill&w=240&h=240&q=90', // IT Consulting
 ];
 const capabilityImgs = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=96&q=80', // AI/ML
@@ -50,17 +50,24 @@ const processSteps = [
   { icon: '🤝', title: 'Managed IT Support', desc: 'We provide ongoing IT support, maintenance, and continuous optimization.' },
 ];
 
-// Service ID mapping for capabilities
-// @ts-expect-error - Reserved for future use
-const _serviceIdMap: Record<string, string> = {
+// Service ID mapping for capabilities and services
+const serviceIdMap: Record<string, string> = {
   'AI & Machine Learning': 'ai-machine-learning',
+  'AI & Machine Learning Solutions': 'ai-machine-learning',
   'Cloud Computing': 'cloud-computing',
+  'Cloud Computing Solutions': 'cloud-computing',
   'DevOps & Automation': 'devops-automation',
+  'DevOps & IT Automation': 'devops-automation',
   'Web Development': 'web-development',
+  'Web Development Services': 'web-development',
   'Mobile App Development': 'mobile-app-development',
+  'Mobile App Development Services': 'mobile-app-development',
   'Data Management': 'data-management',
+  'Data Management Services': 'data-management',
   'Cybersecurity': 'cybersecurity',
+  'Cybersecurity Services': 'cybersecurity',
   'Business Intelligence': 'business-intelligence',
+  'Business Intelligence Services': 'business-intelligence',
 };
 
 const capabilities = [
@@ -83,14 +90,18 @@ const industries = [
 ];
 
 const services = [
-  { title: 'Digital Transformation Services', desc: 'Complete digital transformation solutions to modernize your business operations and drive growth.', img: serviceImgs[0] },
-  { title: 'AI & Machine Learning Solutions', desc: 'Custom artificial intelligence and machine learning solutions for intelligent business automation.', img: serviceImgs[1] },
-  { title: 'Custom Software Development', desc: 'Bespoke software development services for web, mobile, and enterprise applications.', img: serviceImgs[2] },
-  { title: 'Web Development Services', desc: 'Professional website development with modern design and optimal performance.', img: serviceImgs[3] },
-  { title: 'Cloud Computing Solutions', desc: 'Comprehensive cloud migration, management, and optimization services for scalability.', img: serviceImgs[4] },
-  { title: 'DevOps & IT Automation', desc: 'Streamlined DevOps practices and IT automation for faster, reliable deployments.', img: serviceImgs[5] },
-  { title: 'IT Consulting & Strategy', desc: 'Expert IT consulting services to align technology with your business objectives.', img: serviceImgs[5] },
-  { title: 'ERP System Development', desc: 'Comprehensive ERP solutions to integrate and streamline all your business processes.', img: serviceImgs[0] },
+  { title: 'Digital Transformation Services', desc: 'Complete digital transformation solutions to modernize your business operations and drive growth.', img: serviceImgs[0], link: '/services' },
+  { title: 'AI & Machine Learning Solutions', desc: 'Custom artificial intelligence and machine learning solutions for intelligent business automation.', img: serviceImgs[1], link: '/service/ai-machine-learning' },
+  { title: 'Custom Software Development', desc: 'Bespoke software development services for web, mobile, and enterprise applications.', img: serviceImgs[2], link: '/services' },
+  { title: 'Web Development Services', desc: 'Professional website development with modern design and optimal performance.', img: serviceImgs[3], link: '/service/web-development' },
+  { title: 'Cloud Computing Solutions', desc: 'Comprehensive cloud migration, management, and optimization services for scalability.', img: serviceImgs[4], link: '/service/cloud-computing' },
+  { title: 'DevOps & IT Automation', desc: 'Streamlined DevOps practices and IT automation for faster, reliable deployments.', img: serviceImgs[5], link: '/service/devops-automation' },
+  { title: 'Mobile App Development', desc: 'Native iOS, Android, and cross-platform mobile applications.', img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=fill&w=240&h=240&q=90', link: '/service/mobile-app-development' },
+  { title: 'Data Management', desc: 'Big data solutions, database design, and data analytics services.', img: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=fill&w=240&h=240&q=90', link: '/service/data-management' },
+  { title: 'Cybersecurity', desc: 'Security audits, compliance management, and comprehensive threat protection.', img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=fill&w=240&h=240&q=90', link: '/service/cybersecurity' },
+  { title: 'Business Intelligence', desc: 'Data visualization, reporting dashboards, and business analytics solutions.', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=fill&w=240&h=240&q=90', link: '/service/business-intelligence' },
+  { title: 'IT Consulting & Strategy', desc: 'Expert IT consulting services to align technology with your business objectives.', img: serviceImgs[5], link: '/services' },
+  { title: 'ERP System Development', desc: 'Comprehensive ERP solutions to integrate and streamline all your business processes.', img: serviceImgs[0], link: '/services' },
 ];
 
 // Use case studies from data file
@@ -109,10 +120,26 @@ const _team = [
 ];
 
 const testimonials = [
-  '“The engagement led to significant numbers of users and 4.8 ratings in the app store, exceeding our business goals. Suprix Solution executed a smooth workflow through regular standups and effective communication. The team was hard-working, dedicated, and professional.”',
-  '“We are extremely satisfied with Suprix Solution’s work, high quality, and flexibility. They were very process-oriented and skillful. Their team was very adaptable and cooperative throughout the partnership.”',
-  '“Suprix Solution has consistently delivered high-quality outputs on time. Their team impressed us with their development skills, capability to handle complex UI design, and ability to produce the features we requested.”',
-  '“Ever since we onboarded Suprix Solution, we’ve witnessed an increase in engagement metrics, a significant reduction in app crashes, and a surge in positive reviews. Their timeliness, responsiveness, and excellence have positively impacted the project.”',
+  { 
+    text: '"The engagement led to significant numbers of users and 4.8 ratings in the app store, exceeding our business goals. Suprix Solution executed a smooth workflow through regular standups and effective communication. The team was hard-working, dedicated, and professional."',
+    company: 'Mafatlal Industries',
+    link: 'https://www.mafatlals.com/'
+  },
+  { 
+    text: '"We are extremely satisfied with Suprix Solution\'s work, high quality, and flexibility. They were very process-oriented and skillful. Their team was very adaptable and cooperative throughout the partnership."',
+    company: 'Kelps Healthcare',
+    link: 'https://www.kelpshealthcare.in/'
+  },
+  { 
+    text: '"Suprix Solution has consistently delivered high-quality outputs on time. Their team impressed us with their development skills, capability to handle complex UI design, and ability to produce the features we requested."',
+    company: 'Schoolnet India',
+    link: 'https://www.schoolnetindia.com/'
+  },
+  { 
+    text: '"Ever since we onboarded Suprix Solution, we\'ve witnessed an increase in engagement metrics, a significant reduction in app crashes, and a surge in positive reviews. Their timeliness, responsiveness, and excellence have positively impacted the project."',
+    company: 'Vylee',
+    link: 'https://vylee.in/'
+  },
 ];
 
 const awards = [
@@ -726,19 +753,30 @@ We help companies reduce costs, streamline operations, and scale faster with sec
                   minWidth: `calc(100% / ${services.length})`
                 }}
               >
-                <div className="service-slide-content">
-                  <div className="service-icon-container">
-                    <img src={service.img} alt={service.title + ' icon'} className="service-slide-icon" />
-                    <div className="service-icon-glow"></div>
+                <Link 
+                  to={service.link}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    display: 'block',
+                    width: '100%',
+                    height: '100%'
+                  }}
+                >
+                  <div className="service-slide-content" style={{ cursor: 'pointer' }}>
+                    <div className="service-icon-container">
+                      <img src={service.img} alt={service.title + ' icon'} className="service-slide-icon" />
+                      <div className="service-icon-glow"></div>
+                    </div>
+                    <h3 className="service-slide-title">{service.title}</h3>
+                    <p className="service-slide-desc">{service.desc}</p>
+                    <div className="service-slide-features">
+                      <span className="service-feature-tag">Expert Team</span>
+                      <span className="service-feature-tag">24/7 Support</span>
+                      <span className="service-feature-tag">Custom Solutions</span>
+                    </div>
                   </div>
-                  <h3 className="service-slide-title">{service.title}</h3>
-                  <p className="service-slide-desc">{service.desc}</p>
-                  <div className="service-slide-features">
-                    <span className="service-feature-tag">Expert Team</span>
-                    <span className="service-feature-tag">24/7 Support</span>
-                    <span className="service-feature-tag">Custom Solutions</span>
-                  </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -785,7 +823,7 @@ We help companies reduce costs, streamline operations, and scale faster with sec
       <section className="testimonials-section">
         <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.7 }}>Client Testimonials & Success Stories</motion.h2>
         <div className="testimonials-grid">
-          {testimonials.map((text, idx) => (
+          {testimonials.map((testimonial, idx) => (
             <motion.blockquote
               key={idx}
               className="testimonial-card"
@@ -793,7 +831,30 @@ We help companies reduce costs, streamline operations, and scale faster with sec
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              {text}
+              <p style={{ marginBottom: '1.5rem' }}>{testimonial.text}</p>
+              <div style={{ 
+                marginTop: 'auto', 
+                paddingTop: '1rem', 
+                borderTop: '1px solid rgba(0, 0, 0, 0.1)',
+                textAlign: 'right'
+              }}>
+                <a 
+                  href={testimonial.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#f58220',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '0.95rem',
+                    transition: 'color 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#e26c0a'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#f58220'}
+                >
+                  — {testimonial.company}
+                </a>
+              </div>
             </motion.blockquote>
           ))}
         </div>
