@@ -2,6 +2,11 @@ import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { caseStudies as caseStudiesData } from '../data/caseStudies';
+import hclLogo from '../assets/hcl.png';
+import vyleeLogo from '../assets/vylee.png';
+import mafatlalLogo from '../assets/mafatlal.png';
+import vridheeLogo from '../assets/vridhee.png';
+import schoolnetLogo from '../assets/schoolnet.png';
 
 const serviceImgs = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=fill&w=240&h=240&q=90', // AI/ML
@@ -51,7 +56,8 @@ const processSteps = [
 ];
 
 // Service ID mapping for capabilities and services
-const serviceIdMap: Record<string, string> = {
+// @ts-expect-error - Reserved for future use
+const _serviceIdMap: Record<string, string> = {
   'AI & Machine Learning': 'ai-machine-learning',
   'AI & Machine Learning Solutions': 'ai-machine-learning',
   'Cloud Computing': 'cloud-computing',
@@ -82,7 +88,12 @@ const capabilities = [
 ];
 
 const clients = [
-  'HCL Healthcare', 'Vylee', 'Mafatlal Industries', 'Vridhee', 'Schoolnet', 'Chopsy Tracking',
+  { name: 'HCL Healthcare', logo: hclLogo },
+  { name: 'Vylee', logo: vyleeLogo },
+  { name: 'Mafatlal Industries', logo: mafatlalLogo },
+  { name: 'Vridhee', logo: vridheeLogo },
+  { name: 'Schoolnet', logo: schoolnetLogo },
+  { name: 'Chopsy Tracking', logo: null }, // No logo available
 ];
 
 const industries = [
@@ -383,14 +394,19 @@ We help companies reduce costs, streamline operations, and scale faster with sec
           width: '100%',
           maxWidth: '1150px',
           margin: '0.5rem auto',
-          padding: '4px 1rem 0 1rem',
-          position: 'relative'
+          padding: '1rem',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '120px'
         }}>
           <div style={{
             display: 'flex',
+            alignItems: 'center',
             gap: '1rem',
             animation: 'scroll 30s linear infinite',
-            width: 'fit-content'
+            width: 'fit-content',
+            height: '100px'
           }}>
             {/* First set of clients */}
             {clients.map((client, idx) => (
@@ -398,18 +414,21 @@ We help companies reduce costs, streamline operations, and scale faster with sec
                 key={`client-1-${idx}`}
                 style={{
                   backgroundColor: 'white',
-                  border: '2px solid black',
+                  border: 'none',
                   borderRadius: '12px',
-                  padding: '1rem 1.5rem',
+                  padding: '1.5rem 2rem',
                   textAlign: 'center',
-                  fontWeight: '600',
-                  fontSize: '1rem',
-                  color: 'black',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                   transition: 'all 0.3s ease',
                   cursor: 'default',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  minWidth: '180px',
+                  height: '100px',
+                  margin: 0,
+                  verticalAlign: 'middle'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
@@ -420,7 +439,24 @@ We help companies reduce costs, streamline operations, and scale faster with sec
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
                 }}
               >
-                <span>{client}</span>
+                {client.logo ? (
+                  <img 
+                    src={client.logo} 
+                    alt={client.name} 
+                    style={{
+                      maxWidth: '160px',
+                      maxHeight: '80px',
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto',
+                      verticalAlign: 'middle'
+                    }}
+                  />
+                ) : (
+                  <span style={{ fontWeight: '600', fontSize: '1rem', color: 'black' }}>{client.name}</span>
+                )}
               </div>
             ))}
             {/* Duplicate set for seamless loop */}
@@ -429,18 +465,21 @@ We help companies reduce costs, streamline operations, and scale faster with sec
                 key={`client-2-${idx}`}
                 style={{
                   backgroundColor: 'white',
-                  border: '2px solid black',
+                  border: 'none',
                   borderRadius: '12px',
-                  padding: '1rem 1.5rem',
+                  padding: '1.5rem 2rem',
                   textAlign: 'center',
-                  fontWeight: '600',
-                  fontSize: '1rem',
-                  color: 'black',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                   transition: 'all 0.3s ease',
                   cursor: 'default',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  minWidth: '180px',
+                  height: '100px',
+                  margin: 0,
+                  verticalAlign: 'middle'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
@@ -451,7 +490,24 @@ We help companies reduce costs, streamline operations, and scale faster with sec
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
                 }}
               >
-                <span>{client}</span>
+                {client.logo ? (
+                  <img 
+                    src={client.logo} 
+                    alt={client.name} 
+                    style={{
+                      maxWidth: '160px',
+                      maxHeight: '80px',
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto',
+                      verticalAlign: 'middle'
+                    }}
+                  />
+                ) : (
+                  <span style={{ fontWeight: '600', fontSize: '1rem', color: 'black' }}>{client.name}</span>
+                )}
               </div>
             ))}
           </div>
